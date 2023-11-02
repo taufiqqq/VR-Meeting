@@ -25,7 +25,7 @@
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
 # Ignore assets folder (too big)
-/_[Aa]ssets/
+/[Aa]ssets/_Assets/
 
 # Visual Studio cache directory
 .vs/
