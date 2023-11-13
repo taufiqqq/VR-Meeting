@@ -40,17 +40,18 @@ public class NetworkConnect : MonoBehaviour
             lobbyOptions.IsPrivate = false;
 
             lobbyOptions.Data = new Dictionary<string, DataObject>();
-             DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
-             lobbyOptions.Data.Add("JOIN_CODE", dataObject);
-
+            DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
+            lobbyOptions.Data.Add("JOIN_CODE", dataObject);
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
+
+            Debug.LogError("Lobby ID : " + currentLobby.Id);
+            Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
 
             NetworkManager.Singleton.StartHost();
     }
     //Control class (client side)
     //Combined control / boundary
-
 
     public async void Join()
     {
@@ -68,7 +69,10 @@ public class NetworkConnect : MonoBehaviour
         JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
 
         transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
-
+        
+        Debug.LogError("Lobby ID : " + currentLobby.Id);
+        Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+        
         NetworkManager.Singleton.StartClient();
     }
 
