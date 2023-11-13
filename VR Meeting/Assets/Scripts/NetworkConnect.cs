@@ -13,7 +13,6 @@ using Unity.Services.Lobbies.Models;
 public class NetworkConnect : MonoBehaviour
 {   
     public string lobbyId;
-    public string joinCode;
     public int maxConnection = 20;
     public UnityTransport transport;
 
