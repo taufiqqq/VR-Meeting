@@ -66,7 +66,7 @@ public class NetworkConnect : MonoBehaviour
             Debug.LogError(e);
         }
 
-        string relayJoinCode = joinCode; // currentLobby.Data["JOIN_CODE"].Value;
+        string relayJoinCode = currentLobby.Data["JOIN_CODE"].Value;
         Debug.LogError(relayJoinCode);
         JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
 
