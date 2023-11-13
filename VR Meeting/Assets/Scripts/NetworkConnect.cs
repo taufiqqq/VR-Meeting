@@ -37,7 +37,6 @@ public class NetworkConnect : MonoBehaviour
 
             CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
 
-
             lobbyOptions.IsPrivate = false;
 
             lobbyOptions.Data = new Dictionary<string, DataObject>();
