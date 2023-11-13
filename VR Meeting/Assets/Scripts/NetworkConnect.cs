@@ -32,7 +32,6 @@ public class NetworkConnect : MonoBehaviour
             string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Debug.Log(newJoinCode);
             Debug.LogError(newJoinCode);
-            joinCode = newJoinCode;
 
             transport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
 
