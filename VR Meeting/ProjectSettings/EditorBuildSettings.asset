@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main VR Scene.unity
     guid: e092716d5bf76134cbc95ec3d29ae511
+  - enabled: 1
+    path: Assets/Scenes/Meeting Room.unity
+    guid: f6ce573368f7c6e449ce071c7d2a4c7f
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b39a4b5c829f7084da1562f3f28bb9a6,
       type: 2}
