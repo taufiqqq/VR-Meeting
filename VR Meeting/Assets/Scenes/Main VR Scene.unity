@@ -2793,7 +2793,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbyId: 
-  joinCode: 
   maxConnection: 20
   transport: {fileID: 1528971332}
 --- !u!1 &1541597273 stripped

@@ -9,6 +9,7 @@ using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Lobbies; //rectangular notation external actor (server side)
 using Unity.Services.Lobbies.Models;
+using UnityEngine.SceneManagement;
 
 public class NetworkConnect : MonoBehaviour
 {   
@@ -28,6 +29,8 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Create()
     {
+            SceneManager.LoadScene(1);
+
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
             string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Debug.Log(newJoinCode);
@@ -55,6 +58,8 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Join()
     {
+        SceneManager.LoadScene(1);
+        
         try
         { 
             currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
