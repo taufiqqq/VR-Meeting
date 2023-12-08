@@ -58,11 +58,11 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Join()
     {
-        SceneManager.LoadScene(1);
-        
+        if (lobbyId != "") { 
         try
-        { 
-            currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
+        {
+                currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
+                SceneManager.LoadScene(1);
         }
         catch (LobbyServiceException e)
         {
@@ -79,6 +79,7 @@ public class NetworkConnect : MonoBehaviour
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
         
         NetworkManager.Singleton.StartClient();
+        }
     }
 
     private void Update()
@@ -94,4 +95,10 @@ public class NetworkConnect : MonoBehaviour
         heartBeatTimer += Time.deltaTime;
         
         }
+
+    public void StoreJoinId(string data)
+    {
+        lobbyId = data;
+        // You can perform additional network-related operations if needed
+    }
 }
