@@ -13,7 +13,7 @@ public class GetJoinCode : MonoBehaviour
     public void TransferDataToNetworkManager()
     {
         string inputData = tmpInputField.text;
-        networkConnect.StoreJoinId(inputData);
+        networkConnect.setJoinCode(inputData);
     }
 }
 

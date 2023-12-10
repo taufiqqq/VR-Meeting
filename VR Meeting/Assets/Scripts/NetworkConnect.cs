@@ -13,12 +13,12 @@ using UnityEngine.SceneManagement;
 
 public class NetworkConnect : MonoBehaviour
 {   
-    public string lobbyId;
-    public int maxConnection = 20;
-    public UnityTransport transport;
-
+    private string joinCode;
     private Lobby currentLobby;
     private float heartBeatTimer;
+    
+    public int maxConnection = 20;
+    public UnityTransport transport;
 
     private async void Awake()
     {
@@ -48,20 +48,21 @@ public class NetworkConnect : MonoBehaviour
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
-            Debug.LogError("Lobby ID : " + currentLobby.Id);
-            Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+            Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
 
+            joinCode = currentLobby.LobbyCode;
+            
+            UpdateLobbyCode(joinCode);
             NetworkManager.Singleton.StartHost();
     }
-    //Control class (client side)
-    //Combined control / boundary
+    
 
     public async void Join()
     {
-        if (lobbyId != "") { 
+        if (joinCode != "") { 
         try
         {
-                currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
+                currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
                 SceneManager.LoadScene(1);
         }
         catch (LobbyServiceException e)
@@ -77,7 +78,8 @@ public class NetworkConnect : MonoBehaviour
         
         Debug.LogError("Lobby ID : " + currentLobby.Id);
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-        
+
+        UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
         }
     }
@@ -96,9 +98,22 @@ public class NetworkConnect : MonoBehaviour
         
         }
 
-    public void StoreJoinId(string data)
+    public void setJoinCode(string data)
     {
-        lobbyId = data;
+        joinCode = data;
         // You can perform additional network-related operations if needed
+    }
+
+    public string getJoinCode()
+    {
+        return joinCode;
+    }
+    private void UpdateLobbyCode(string lobbyCode)
+    {
+        DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
+        Debug.LogError("hello");
+
+        displayJoinCode.UpdateLobbyCode(lobbyCode);
+
     }
 }
