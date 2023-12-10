@@ -47,8 +47,9 @@ public class NetworkConnect : MonoBehaviour
 
             Debug.LogError("Lobby ID : " + currentLobby.Id);
             Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-
-            NetworkManager.Singleton.StartHost();
+            Debug.LogError("Lobby Join Code: " + currentLobby.LobbyCode);
+            
+        NetworkManager.Singleton.StartHost();
     }
     //Control class (client side)
     //Combined control / boundary
@@ -57,7 +58,7 @@ public class NetworkConnect : MonoBehaviour
     {
         try
         { 
-            currentLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobbyId);
+            currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyId);
         }
         catch (LobbyServiceException e)
         {
