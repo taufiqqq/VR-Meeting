@@ -29,7 +29,7 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Create()
     {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
 
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
             string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
@@ -63,7 +63,7 @@ public class NetworkConnect : MonoBehaviour
         try
         {
                 currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene(2);
         }
         catch (LobbyServiceException e)
         {
