@@ -8852,9 +8852,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1528971335}
-        m_TargetAssemblyTypeName: NetworkConnect, Assembly-CSharp
-        m_MethodName: Join
+      - m_Target: {fileID: 1528971336}
+        m_TargetAssemblyTypeName: GetJoinCode, Assembly-CSharp
+        m_MethodName: TransferDataToNetworkManager
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9142,6 +9142,7 @@ GameObject:
   - component: {fileID: 1528971333}
   - component: {fileID: 1528971332}
   - component: {fileID: 1528971335}
+  - component: {fileID: 1528971336}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -9240,9 +9241,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 659ae30a32e4ad245a15f740f7ffa47d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyId: 
   maxConnection: 20
   transport: {fileID: 1528971332}
+--- !u!114 &1528971336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528971331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257151bb1dbfa9f40b4bd5838ff45e43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbyCodeInput: {fileID: 1952853653}
+  networkConnect: {fileID: 1528971335}
 --- !u!1 &1541597273 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5686134208185362930, guid: 1fd3a7c43c8190f4d8c167ebde694364,
@@ -11103,6 +11117,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02be27ab17ab3b14f954f65dc06dd738, type: 3}
+--- !u!114 &1952853653 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3484128599267958350, guid: 02be27ab17ab3b14f954f65dc06dd738,
+    type: 3}
+  m_PrefabInstance: {fileID: 1952853652}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1972164314
 PrefabInstance:
   m_ObjectHideFlags: 0

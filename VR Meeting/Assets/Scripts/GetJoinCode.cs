@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class GetJoinCode : MonoBehaviour
 {
-    public InputField tmpInputField;
+    public TMP_InputField lobbyCodeInput;
     public NetworkConnect networkConnect;
 
     public void TransferDataToNetworkManager()
     {
-        string inputData = tmpInputField.text;
+        string inputData = lobbyCodeInput.text;
         networkConnect.setJoinCode(inputData);
+        networkConnect.Join();
     }
 }
 

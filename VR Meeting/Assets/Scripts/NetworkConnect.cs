@@ -16,10 +16,11 @@ public class NetworkConnect : MonoBehaviour
     private string joinCode;
     private Lobby currentLobby;
     private float heartBeatTimer;
-    
+  
     public int maxConnection = 20;
     public UnityTransport transport;
 
+    
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -78,7 +79,7 @@ public class NetworkConnect : MonoBehaviour
         
         Debug.LogError("Lobby ID : " + currentLobby.Id);
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-
+        
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
         }
@@ -111,9 +112,8 @@ public class NetworkConnect : MonoBehaviour
     private void UpdateLobbyCode(string lobbyCode)
     {
         DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
-        Debug.LogError("hello");
 
         displayJoinCode.UpdateLobbyCode(lobbyCode);
-
     }
+
 }
