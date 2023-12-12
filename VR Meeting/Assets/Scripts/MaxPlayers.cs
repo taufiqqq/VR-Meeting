@@ -1,22 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-<<<<<<< Updated upstream
-using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.UI;
 
-
-public class GetMaxPlayers : MonoBehaviour
-{
-    public InputField tmpInputField;
-    public NetworkConnect networkConnect;
-
-    public void TransferDataToNetworkManager()
-    {
-        string inputData = tmpInputField.text;
-        networkConnect.setJoinCode(inputData);
-    }
-=======
 using UnityEngine;
 using TMPro;
 
@@ -53,5 +37,4 @@ public class MaxPlayer : MonoBehaviour
 
     }
 
->>>>>>> Stashed changes
 }
