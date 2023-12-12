@@ -16,12 +16,24 @@ public class NetworkConnect : MonoBehaviour
     private string joinCode;
     private Lobby currentLobby;
     private float heartBeatTimer;
+<<<<<<< Updated upstream
 
     private int maxConnection;
 
     //public int maxConnection = 20;
     public UnityTransport transport;
 
+=======
+  
+    public int maxConnection ;
+    public UnityTransport transport;
+
+    private GameObject playerInfoContent;
+
+    private string playerId;
+    private List<string> joinedPlayers = new List<string>(); // List to store joined player IDs
+
+>>>>>>> Stashed changes
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -50,7 +62,12 @@ public class NetworkConnect : MonoBehaviour
 
         currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
+<<<<<<< Updated upstream
         Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
+=======
+            Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
+            Debug.LogError("Max Participants " + maxConnection);
+>>>>>>> Stashed changes
 
         joinCode = currentLobby.LobbyCode;
 
@@ -77,6 +94,7 @@ public class NetworkConnect : MonoBehaviour
             Debug.LogError(relayJoinCode);
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
 
+<<<<<<< Updated upstream
             transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
 
             Debug.LogError("Lobby ID : " + currentLobby.Id);
@@ -84,6 +102,18 @@ public class NetworkConnect : MonoBehaviour
 
             UpdateLobbyCode(joinCode);
             NetworkManager.Singleton.StartClient();
+=======
+        transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
+        
+        Debug.LogError("Lobby ID : " + currentLobby.Id);
+        Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+        
+        Debug.Log("Players in room : " + currentLobby.Players.Count);
+        NetworkManager.Singleton.OnClientConnectedCallback += HandlePlayerJoined;
+
+        UpdateLobbyCode(joinCode);
+        NetworkManager.Singleton.StartClient();
+>>>>>>> Stashed changes
         }
     }
 
@@ -120,6 +150,7 @@ public class NetworkConnect : MonoBehaviour
 
     }
 
+<<<<<<< Updated upstream
     public void setMaxConnection(int data){
 
         maxConnection = data;
@@ -130,3 +161,72 @@ public class NetworkConnect : MonoBehaviour
         return maxConnection;
     }
 }
+=======
+     public void setMaxPlayer(int data)
+    {
+        maxConnection = data;
+        // You can perform additional network-related operations if needed
+    }
+
+    public int getMaxPlayer()
+    {
+        return maxConnection;
+    }
+    private void UpdateMaxPlayer(int maxPlayer)
+    {
+        DisplayMaxPlayer displayMaxPlayer = FindObjectOfType<DisplayMaxPlayer>();
+
+        displayMaxPlayer.UpdateMaxPlayer(maxPlayer);
+    }
+
+    private bool IsHost()
+    {
+        
+        if(currentLobby!=null && currentLobby.HostId == playerId)
+        {   
+            Debug.Log("this is Host ");
+            return true;
+        }
+        return false;
+    }
+
+    private void HandlePlayerJoined(ulong clientId)
+    {
+        string playerId = clientId.ToString(); // Convert the client ID to a string
+        joinedPlayers.Add(playerId);
+
+        // You can do additional operations with the playerId if needed
+        Debug.Log("Player joined: " + playerId);
+        Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
+
+        // Update your UI or perform other actions as needed
+        UpdatePlayerList(joinedPlayers);
+    }
+
+    private void UpdatePlayerList(List<string> players)
+    {
+        // Example: Display the player list in the console
+        Debug.Log("Player List:");
+        foreach (string playerId in players)
+        {
+            Debug.Log(playerId);
+        }
+
+        // You can update your UI or perform other actions with the player list
+    }
+
+    private async void LeaveRoom()
+    {
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+            currentLobby = null;
+            
+        }catch(LobbyServiceException e)
+        {
+            Debug.Log(e);
+            Debug.Log("taknak bye");
+        }
+    }
+}
+>>>>>>> Stashed changes

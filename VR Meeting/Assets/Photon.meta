@@ -1,5 +1,6 @@
 fileFormatVersion: 2
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 guid: 98951132346795f438babe7a3183da43
 folderAsset: yes
 timeCreated: 1523536679
@@ -12,6 +13,12 @@ guid: 3e6b5a110557e41409aea78bf8a1f91e
 guid: 98951132346795f438babe7a3183da43
 folderAsset: yes
 >>>>>>>> Stashed changes:VR Meeting/Assets/Photon.meta
+DefaultImporter:
+  externalObjects: {}
+>>>>>>> Stashed changes
+=======
+guid: 98951132346795f438babe7a3183da43
+folderAsset: yes
 DefaultImporter:
   externalObjects: {}
 >>>>>>> Stashed changes

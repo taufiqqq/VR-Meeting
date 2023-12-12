@@ -20,7 +20,7 @@ public class DisplayJoinCode : MonoBehaviour
 
     public void UpdateLobbyCode(string lobbyCode)
     {
-        Debug.LogError("hello 2"+lobbyCode);
+        Debug.LogError("hello 2 "+lobbyCode);
 
         if (lobbyCode != null)
         {
