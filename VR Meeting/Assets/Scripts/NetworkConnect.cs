@@ -16,14 +16,6 @@ public class NetworkConnect : MonoBehaviour
     private string joinCode;
     private Lobby currentLobby;
     private float heartBeatTimer;
-<<<<<<< Updated upstream
-
-    private int maxConnection;
-
-    //public int maxConnection = 20;
-    public UnityTransport transport;
-
-=======
   
     public int maxConnection ;
     public UnityTransport transport;
@@ -33,7 +25,6 @@ public class NetworkConnect : MonoBehaviour
     private string playerId;
     private List<string> joinedPlayers = new List<string>(); // List to store joined player IDs
 
->>>>>>> Stashed changes
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -62,12 +53,8 @@ public class NetworkConnect : MonoBehaviour
 
         currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
-<<<<<<< Updated upstream
-        Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
-=======
             Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
             Debug.LogError("Max Participants " + maxConnection);
->>>>>>> Stashed changes
 
         joinCode = currentLobby.LobbyCode;
 
@@ -94,15 +81,6 @@ public class NetworkConnect : MonoBehaviour
             Debug.LogError(relayJoinCode);
             JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
 
-<<<<<<< Updated upstream
-            transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
-
-            Debug.LogError("Lobby ID : " + currentLobby.Id);
-            Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-
-            UpdateLobbyCode(joinCode);
-            NetworkManager.Singleton.StartClient();
-=======
         transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
         
         Debug.LogError("Lobby ID : " + currentLobby.Id);
@@ -113,7 +91,6 @@ public class NetworkConnect : MonoBehaviour
 
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
->>>>>>> Stashed changes
         }
     }
 
@@ -150,18 +127,6 @@ public class NetworkConnect : MonoBehaviour
 
     }
 
-<<<<<<< Updated upstream
-    public void setMaxConnection(int data){
-
-        maxConnection = data;
-    }
-
-    public int getMaxConnection()
-    {
-        return maxConnection;
-    }
-}
-=======
      public void setMaxPlayer(int data)
     {
         maxConnection = data;
@@ -229,4 +194,3 @@ public class NetworkConnect : MonoBehaviour
         }
     }
 }
->>>>>>> Stashed changes
