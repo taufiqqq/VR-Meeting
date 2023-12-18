@@ -18,7 +18,7 @@ public class getMaxPlayer : MonoBehaviour
     
         // If parsing is successful, set the value
         networkConnect.setMaxPlayer(inputData);
-    
+        networkConnect.Create();
    
     }
 }

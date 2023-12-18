@@ -54,9 +54,12 @@ public class NetworkConnect : MonoBehaviour
         currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
             Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
-            Debug.LogError("Max Participants " + maxConnection);
+            Debug.LogError("Max Participants : " + maxConnection);
 
         joinCode = currentLobby.LobbyCode;
+
+        Debug.Log("Players in room : " + currentLobby.Players.Count);
+        NetworkManager.Singleton.OnClientConnectedCallback += HandlePlayerJoined;
 
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartHost();
@@ -180,7 +183,7 @@ public class NetworkConnect : MonoBehaviour
         // You can update your UI or perform other actions with the player list
     }
 
-    private async void LeaveRoom()
+    public async void LeaveRoom()
     {
         try
         {
