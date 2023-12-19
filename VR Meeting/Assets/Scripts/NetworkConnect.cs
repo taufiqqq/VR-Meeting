@@ -45,7 +45,12 @@ public class NetworkConnect : MonoBehaviour
 
             lobbyOptions.Data = new Dictionary<string, DataObject>();
             DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
+
+            string hostName = "admin"; // Replace with the actual host name
+            DataObject hostNameDataObject = new DataObject(DataObject.VisibilityOptions.Public, hostName);
+            
             lobbyOptions.Data.Add("JOIN_CODE", dataObject);
+            lobbyOptions.Data.Add("HOST_NAME", hostNameDataObject);
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
@@ -60,11 +65,13 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Join()
     {
+        QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+
         if (joinCode != "") { 
         try
         {
-                currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
-                SceneManager.LoadScene(2);
+            currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
+            SceneManager.LoadScene(2);
         }
         catch (LobbyServiceException e)
         {
@@ -116,4 +123,31 @@ public class NetworkConnect : MonoBehaviour
         displayJoinCode.UpdateLobbyCode(lobbyCode);
     }
 
+    public async void ListLobbies()
+    {
+        try
+        {
+            QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+
+            Debug.Log("Lobbies found: " + queryResponse.Results.Count);
+            foreach (Lobby lobby in queryResponse.Results)
+            {
+                Debug.Log(lobby.LobbyCode + " " + lobby.MaxPlayers);
+
+                if (lobby.Data.ContainsKey("HOST_NAME"))
+                {
+                    if (lobby.Data["HOST_NAME"].Value == "admin")
+                    {
+                        Debug.Log("lurve: " + lobby.LobbyCode);
+                        joinCode = lobby.LobbyCode;
+                        Debug.Log(lobby.Data["HOST_NAME"].Value);
+                        Debug.Log(joinCode);
+                    }
+                }
+            }
+        } catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+        }
+    }
 }
