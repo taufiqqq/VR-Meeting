@@ -12,13 +12,14 @@ using Unity.Services.Lobbies.Models;
 
 public class NetworkConnect : MonoBehaviour
 {   
-    public string lobbyId;
+    private string joinCode;
+    private Lobby currentLobby;
+    private float heartBeatTimer;
+  
     public int maxConnection = 20;
     public UnityTransport transport;
 
-    private Lobby currentLobby;
-    private float heartBeatTimer;
-
+    
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -28,6 +29,9 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Create()
     {
+
+            SceneManager.LoadScene(2);
+
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
             string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             Debug.Log(newJoinCode);
@@ -45,20 +49,36 @@ public class NetworkConnect : MonoBehaviour
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
+
+            Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
+
+            joinCode = currentLobby.LobbyCode;
+            
+            UpdateLobbyCode(joinCode);
+            NetworkManager.Singleton.StartHost();
+
             Debug.LogError("Lobby ID : " + currentLobby.Id);
             Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
             Debug.LogError("Lobby Join Code: " + currentLobby.LobbyCode);
             
         NetworkManager.Singleton.StartHost();
+
     }
-    //Control class (client side)
-    //Combined control / boundary
+    
 
     public async void Join()
     {
+
+        if (joinCode != "") { 
+        try
+        {
+                currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
+                SceneManager.LoadScene(2);
+
         try
         { 
             currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyId);
+
         }
         catch (LobbyServiceException e)
         {
@@ -74,7 +94,9 @@ public class NetworkConnect : MonoBehaviour
         Debug.LogError("Lobby ID : " + currentLobby.Id);
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
         
+        UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
+        }
     }
 
     private void Update()
@@ -90,4 +112,22 @@ public class NetworkConnect : MonoBehaviour
         heartBeatTimer += Time.deltaTime;
         
         }
+
+    public void setJoinCode(string data)
+    {
+        joinCode = data;
+        // You can perform additional network-related operations if needed
+    }
+
+    public string getJoinCode()
+    {
+        return joinCode;
+    }
+    private void UpdateLobbyCode(string lobbyCode)
+    {
+        DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
+
+        displayJoinCode.UpdateLobbyCode(lobbyCode);
+    }
+
 }
