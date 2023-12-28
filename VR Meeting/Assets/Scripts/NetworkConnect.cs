@@ -16,8 +16,11 @@ public class NetworkConnect : MonoBehaviour
     private string joinCode;
     private Lobby currentLobby;
     private float heartBeatTimer;
-  
-    public int maxConnection = 20;
+    private string playerId;
+
+    private List<string> joinedPlayers = new List<string>();
+
+    public int maxConnection;
     public UnityTransport transport;
 
     
@@ -149,5 +152,72 @@ public class NetworkConnect : MonoBehaviour
         {
             Debug.Log(e);
         }
+    }
+
+    public void setMaxPlayer(int data)
+    {
+        maxConnection = data;
+        // You can perform additional network-related operations if needed
+    }
+
+    public int getMaxPlayer()
+    {
+        return maxConnection;
+    }
+ 
+
+    private bool IsHost()
+    {
+
+        if (currentLobby != null && currentLobby.HostId == playerId)
+        {
+            Debug.Log("this is Host ");
+            return true;
+        }
+        return false;
+    }
+
+    private void HandlePlayerJoined(ulong clientId)
+    {
+        string playerId = clientId.ToString(); // Convert the client ID to a string
+        joinedPlayers.Add(playerId);
+
+        // You can do additional operations with the playerId if needed
+        Debug.Log("Player joined: " + playerId);
+        Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
+
+        // Update your UI or perform other actions as needed
+        UpdatePlayerList(joinedPlayers);
+    }
+
+    private void UpdatePlayerList(List<string> players)
+    {
+        // Example: Display the player list in the console
+        Debug.Log("Player List:");
+        foreach (string playerId in players)
+        {
+            Debug.Log(playerId);
+        }
+
+        // You can update your UI or perform other actions with the player list
+    }
+
+    public async void LeaveRoom()
+    {
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+            currentLobby = null;
+
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+            Debug.Log("taknak bye");
+        }
+    }
+
+    public string getPlayerId(){
+        return playerId;
     }
 }

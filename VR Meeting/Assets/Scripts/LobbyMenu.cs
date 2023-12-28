@@ -13,6 +13,7 @@ public class LobbyMenu : MonoBehaviour
     public GameObject createPage;
     public GameObject joinPage;
     public GameObject viewMeetingPage;
+    public GameObject scheduleMeetingPage;
 
     // Buttons in Account Validation
     public Button loginButton;
@@ -28,6 +29,7 @@ public class LobbyMenu : MonoBehaviour
     public Button createMeetingButton;
     public Button joinMeetingButton;
     public Button viewMeetingButton;
+    public Button scheduleMeetingButton;
 
     // Buttons in Create Page
     public Button createMeetingSubmitButton;
@@ -36,7 +38,11 @@ public class LobbyMenu : MonoBehaviour
     // Buttons in Join Page
     public Button joinMeetingSubmitButton;
 
+    //Buttons in Schedule Page
+    public Button scheduleMeetingSubmitButton;
+
     public NetworkConnect nc;
+    public CloudSave cs;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +56,8 @@ public class LobbyMenu : MonoBehaviour
         loginSubmitButton.onClick.AddListener(LoginSubmit);
         registerSubmitButton.onClick.AddListener(RegisterSubmit);
 
+
+        scheduleMeetingButton.onClick.AddListener(EnableScheduleMeetingPage);
         createMeetingButton.onClick.AddListener(EnableCreatePage);
         joinMeetingButton.onClick.AddListener(EnableJoinPage);
         viewMeetingButton.onClick.AddListener(EnableViewMeetingPage);
@@ -57,6 +65,8 @@ public class LobbyMenu : MonoBehaviour
         createMeetingSubmitButton.onClick.AddListener(CreateMeetingSubmit);
 
         joinMeetingSubmitButton.onClick.AddListener(JoinMeetingSubmit);
+
+        scheduleMeetingSubmitButton.onClick.AddListener(ScheduleMeetingSubmit);
 
         foreach (var returnButton in returnButtons)
         {
@@ -78,6 +88,8 @@ public class LobbyMenu : MonoBehaviour
         else if (joinPage.activeSelf)
             EnableMainMenu();
         else if (viewMeetingPage.activeSelf)
+            EnableMainMenu();
+        else if (scheduleMeetingPage.activeSelf)
             EnableMainMenu();
     }
 
@@ -141,14 +153,24 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
+    void EnableScheduleMeetingPage()
+    {
+        mainMenu.SetActive(false);
+        createPage.SetActive(false);
+        joinPage.SetActive(false);
+        viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(true);
+    }
     void EnableCreatePage()
     {
         mainMenu.SetActive(false);
         createPage.SetActive(true);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void EnableJoinPage()
@@ -157,6 +179,7 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(true);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void EnableViewMeetingPage()
@@ -165,6 +188,7 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(true);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void CreateMeetingSubmit()
@@ -183,5 +207,11 @@ public class LobbyMenu : MonoBehaviour
 
         // Assuming successful meeting join, enable the main menu
         EnableMainMenu();
+    }
+
+    void ScheduleMeetingSubmit()
+    {
+        cs.SaveData();
+        EnableMainMenu();   
     }
 }
