@@ -15,7 +15,6 @@ MonoBehaviour:
   welcomeScreenVersion: '1.9.7 '
   playmakerVersion: 
   showWelcomeScreen: 1
-  showUpgradeGuide: 0
-  lastAutoUpdateSignature: 2022.3.11f1__E:/Documents/UTM/Year 3/Sem 1/SECJ3104-02
-    (AD)/VR-MEETING/VR-Meeting/VR Meeting/Assets__0.0.0.0
+  showUpgradeGuide: 1
+  lastAutoUpdateSignature: 2022.3.11f1__K:/LUQZ/stable/VR-Meeting/VR Meeting/Assets__0.0.0.0
   useLegacyNetworking: 0
