@@ -23,11 +23,17 @@ public class NetworkConnect : MonoBehaviour
     private GameObject playerInfoContent;
 
     private string playerId;
+    private string hostId;
     private List<string> joinedPlayers = new List<string>(); // List to store joined player IDs
 
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
+        AuthenticationService.Instance.SignedIn += () =>
+        {
+            playerId = AuthenticationService.Instance.PlayerId;
+            Debug.Log("Signed in " + playerId);
+        };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
     // Start is called before the first frame update
@@ -50,16 +56,20 @@ public class NetworkConnect : MonoBehaviour
         lobbyOptions.Data = new Dictionary<string, DataObject>();
         DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
         lobbyOptions.Data.Add("JOIN_CODE", dataObject);
-
+       
+        
         currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
+        
+        hostId = playerId; 
 
             Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
             Debug.LogError("Max Participants : " + maxConnection);
+            Debug.LogError("Host Player ID: " + hostId);
 
         joinCode = currentLobby.LobbyCode;
-
-        Debug.Log("Players in room : " + currentLobby.Players.Count);
-        NetworkManager.Singleton.OnClientConnectedCallback += HandlePlayerJoined;
+        Debug.Log("Number of Players in room : " + currentLobby.Players.Count);
+        HandlePlayer();
+        UpdateMaxPlayer(maxConnection);
 
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartHost();
@@ -88,9 +98,9 @@ public class NetworkConnect : MonoBehaviour
         
         Debug.LogError("Lobby ID : " + currentLobby.Id);
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-        
-        Debug.Log("Players in room : " + currentLobby.Players.Count);
-        NetworkManager.Singleton.OnClientConnectedCallback += HandlePlayerJoined;
+        Debug.LogError("My Player Id : " + playerId);
+        Debug.Log("Number of Players in room : " + currentLobby.Players.Count);
+        HandlePlayer();
 
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
@@ -147,28 +157,18 @@ public class NetworkConnect : MonoBehaviour
         displayMaxPlayer.UpdateMaxPlayer(maxPlayer);
     }
 
-    private bool IsHost()
-    {
-        
-        if(currentLobby!=null && currentLobby.HostId == playerId)
-        {   
-            Debug.Log("this is Host ");
-            return true;
-        }
-        return false;
-    }
 
-    private void HandlePlayerJoined(ulong clientId)
+    private void HandlePlayer()
     {
-        string playerId = clientId.ToString(); // Convert the client ID to a string
         joinedPlayers.Add(playerId);
 
-        // You can do additional operations with the playerId if needed
+        // Log the joined player ID to the console
         Debug.Log("Player joined: " + playerId);
         Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
 
         // Update your UI or perform other actions as needed
         UpdatePlayerList(joinedPlayers);
+        
     }
 
     private void UpdatePlayerList(List<string> players)
@@ -178,22 +178,34 @@ public class NetworkConnect : MonoBehaviour
         foreach (string playerId in players)
         {
             Debug.Log(playerId);
-        }
-
-        // You can update your UI or perform other actions with the player list
-    }
-
-    public async void LeaveRoom()
-    {
-        try
-        {
-            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
-            currentLobby = null;
-            
-        }catch(LobbyServiceException e)
-        {
-            Debug.Log(e);
-            Debug.Log("taknak bye");
+            PlayerList pl = FindObjectOfType<PlayerList>();
+            pl.UpdatePlayerList(players);
         }
     }
+
+    public List<string> getPlayerList(){
+        return joinedPlayers;
+    }
+
+    // public void LeaveLobby()
+    // {
+    //     if (currentLobby != null && currentLobby.HostId == AuthenticationService.Instance.PlayerId)
+    //     {
+    //         try
+    //         {
+    //             await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+    //             // For example, you can load a scene indicating that the player has left the lobby
+    //             SceneManager.LoadScene(0); // Load the main menu scene (or any other scene you prefer)
+    //         }
+    //         catch (LobbyServiceException e)
+    //         {
+    //             Debug.LogError("Error leaving lobby: " + e.Message);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("No lobby to leave. Player is not currently in a lobby.");
+    //     }
+    // }
+
 }
