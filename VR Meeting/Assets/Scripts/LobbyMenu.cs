@@ -33,21 +33,23 @@ public class LobbyMenu : MonoBehaviour
 
     // Buttons in Create Page
     public Button createMeetingSubmitButton;
-    public List<Button> returnButtons; // Use a list of return buttons
 
     // Buttons in Join Page
     public Button joinMeetingSubmitButton;
 
-    //Buttons in Schedule Page
+    // Buttons in Schedule Page
     public Button scheduleMeetingSubmitButton;
 
-    public NetworkConnect nc;
-    public CloudSave cs;
+    // Other Components
+    public NetworkConnect networkConnect;
+    public CloudSave cloudSave;
+
+    public List<Button> returnButtons; // Use a list of return buttons
+
 
     // Start is called before the first frame update
     void Start()
     {
-        TouchScreenKeyboard.Open("");       
         EnableAccountValidation();
 
         // Hook events
@@ -56,7 +58,6 @@ public class LobbyMenu : MonoBehaviour
 
         loginSubmitButton.onClick.AddListener(LoginSubmit);
         registerSubmitButton.onClick.AddListener(RegisterSubmit);
-
 
         scheduleMeetingButton.onClick.AddListener(EnableScheduleMeetingPage);
         createMeetingButton.onClick.AddListener(EnableCreatePage);
@@ -81,7 +82,7 @@ public class LobbyMenu : MonoBehaviour
         if (loginPage.activeSelf)
             EnableAccountValidation();
         else if (registerPage.activeSelf)
-            EnableAccountValidation();
+            EnableAccountValidation();      
         else if (mainMenu.activeSelf)
             EnableAccountValidation();
         else if (createPage.activeSelf)
@@ -103,6 +104,7 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void EnableLoginPage()
@@ -114,6 +116,7 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void EnableRegisterPage()
@@ -125,6 +128,7 @@ public class LobbyMenu : MonoBehaviour
         createPage.SetActive(false);
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
+        scheduleMeetingPage.SetActive(false);
     }
 
     void LoginSubmit()
@@ -172,6 +176,7 @@ public class LobbyMenu : MonoBehaviour
         joinPage.SetActive(false);
         viewMeetingPage.SetActive(false);
         scheduleMeetingPage.SetActive(false);
+        createMeetingSubmitButton.interactable = true;
     }
 
     void EnableJoinPage()
@@ -212,7 +217,7 @@ public class LobbyMenu : MonoBehaviour
 
     void ScheduleMeetingSubmit()
     {
-        cs.SaveData();
+        cloudSave.SaveData();
         EnableMainMenu();   
     }
 }

@@ -95,7 +95,8 @@ namespace Keyboard
             switchButtonText = switchButton.GetComponentInChildren<TextMeshProUGUI>();
             switchNumSpecButtonText = switchNumberSpecialButton.GetComponentInChildren<TextMeshProUGUI>();
             keyChannel.RaiseKeyColorsChangedEvent(normalColor, highlightedColor, pressedColor, selectedColor);
-            
+            keyChannel.OnKeyPressed += KeyPress;
+
             switchNumberSpecialButton.gameObject.SetActive(false);
             numbersKeyboard.SetActive(false);
             specialCharactersKeyboard.SetActive(false);
@@ -111,12 +112,12 @@ namespace Keyboard
             deleteButton.onClick.RemoveListener(OnDeletePress);
             switchButton.onClick.RemoveListener(OnSwitchPress);
             shiftButton.onClick.RemoveListener(OnShiftPress);
-            switchNumberSpecialButton.onClick.RemoveListener(SwitchBetweenNumbersAndSpecialCharacters);
+            switchNumberSpecialButton.onClick.RemoveListener(SwitchBetweenNumbersAndSpecialCharacters);keyChannel.OnKeyPressed -= KeyPress;
         }
 
-        private void OnEnable() => keyChannel.OnKeyPressed += KeyPress;
+        //private void OnEnable() => keyChannel.OnKeyPressed += KeyPress;
 
-        private void OnDisable() => keyChannel.OnKeyPressed -= KeyPress;
+        //private void OnDisable() => keyChannel.OnKeyPressed -= KeyPress;
 
         private void KeyPress(string key)
         {
