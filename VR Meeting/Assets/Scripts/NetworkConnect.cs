@@ -23,12 +23,22 @@ public class NetworkConnect : MonoBehaviour
     public int maxConnection;
     public UnityTransport transport;
 
+    public AuthManager authManager;
     
-    private async void Awake()
+     private async void Awake()
     {
         await UnityServices.InitializeAsync();
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        // Subscribe to the sign-in complete event
+        AuthManager.Instance.OnSignInComplete += OnSignInComplete;
+
     }
+
+    private void OnSignInComplete()
+    {
+        AuthManager.Instance.Create();
+    }
+
     // Start is called before the first frame update
 
     public async void Create()

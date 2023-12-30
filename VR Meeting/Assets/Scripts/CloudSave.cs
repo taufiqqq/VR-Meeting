@@ -31,63 +31,58 @@ public class CloudSave : MonoBehaviour
         public string title;
     }
 
-    public async void SaveData()
-    {
-        if (!ValidateDateTimeFormat(meetingDateInput.text, meetingTimeInput.text))
-        {
-            Debug.LogError("Invalid date or time format. Please use the correct format.");
-            return;
-        }
+private bool ValidateDateTimeFormat(string date, string time)
+{
+    DateTime parsedDateTime;
+    return DateTime.TryParseExact(date + " " + time, "dd/MM/yyyy hhmmtt", null, System.Globalization.DateTimeStyles.None, out parsedDateTime);
+}
 
-        var user = new User
+public async void SaveData()
+{
+    var user = new User
+    {
+        username = networkConnect.getPlayerId(),
+        meetings = new List<Meeting>
         {
-            username = networkConnect.getPlayerId(),
-            meetings = new List<Meeting>
+            new Meeting
             {
-                new Meeting
-                {
-                    dateTime = DateTime.Parse(meetingDateInput.text + " " + meetingTimeInput.text),
-                    title = meetingTitleInput.text
-                }
+                dateTime = DateTime.Parse(meetingDateInput.text + " " + meetingTimeInput.text),
+                title = meetingTitleInput.text
             }
-        };
-
-        var data = new Dictionary<string, object>
-        {
-            { CLOUD_SAVE_USER_KEY, user }
-        };
-
-        try
-        {
-            Debug.Log("Attempting to save data...");
-
-            await CloudSaveService.Instance.Data.Player.SaveAsync(data);
-
-            Debug.Log("Save data success!");
         }
-        catch (ServicesInitializationException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveValidationException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveRateLimitedException e)
-        {
-            Debug.LogError(e);
-        }
-        catch (CloudSaveException e)
-        {
-            Debug.LogError(e);
-        }
-    }
+    };
 
-    private bool ValidateDateTimeFormat(string date, string time)
+    var data = new Dictionary<string, object>
     {
-        DateTime parsedDateTime;
-        return DateTime.TryParseExact(date + " " + time, "dd/MM/yyyy hhmmtt", null, System.Globalization.DateTimeStyles.None, out parsedDateTime);
+        { CLOUD_SAVE_USER_KEY, user }
+    };
+
+    try
+    {
+        Debug.Log("Attempting to save data...");
+
+        await CloudSaveService.Instance.Data.Player.SaveAsync(data);
+
+        Debug.Log("Save data success!");
     }
+    catch (ServicesInitializationException e)
+    {
+        Debug.LogError(e);
+    }
+    catch (CloudSaveValidationException e)
+    {
+        Debug.LogError(e);
+    }
+    catch (CloudSaveRateLimitedException e)
+    {
+        Debug.LogError(e);
+    }
+    catch (CloudSaveException e)
+    {
+        Debug.LogError(e);
+    }
+}
+
 
     public async void LoadUserData()
     {

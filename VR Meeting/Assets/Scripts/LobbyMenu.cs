@@ -6,18 +6,12 @@ using UnityEngine.UI;
 public class LobbyMenu : MonoBehaviour
 {
     // UI Pages
-    public GameObject accountValidation;
     public GameObject loginPage;
-    public GameObject registerPage;
     public GameObject mainMenu;
     public GameObject createPage;
     public GameObject joinPage;
     public GameObject viewMeetingPage;
     public GameObject scheduleMeetingPage;
-
-    // Buttons in Account Validation
-    public Button loginButton;
-    public Button registerButton;
 
     // Buttons in Login Page
     public Button loginSubmitButton;
@@ -50,11 +44,7 @@ public class LobbyMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnableAccountValidation();
-
-        // Hook events
-        loginButton.onClick.AddListener(EnableLoginPage);
-        registerButton.onClick.AddListener(EnableRegisterPage);
+        EnableLoginPage();
 
         loginSubmitButton.onClick.AddListener(LoginSubmit);
         registerSubmitButton.onClick.AddListener(RegisterSubmit);
@@ -77,53 +67,24 @@ public class LobbyMenu : MonoBehaviour
     }
 
     void EnablePreviousPage()
-    {
-        // Add logic to determine the previous page and enable it
-        if (loginPage.activeSelf)
-            EnableAccountValidation();
-        else if (registerPage.activeSelf)
-            EnableAccountValidation();      
-        else if (mainMenu.activeSelf)
-            EnableAccountValidation();
-        else if (createPage.activeSelf)
-            EnableMainMenu();
-        else if (joinPage.activeSelf)
-            EnableMainMenu();
-        else if (viewMeetingPage.activeSelf)
-            EnableMainMenu();
-        else if (scheduleMeetingPage.activeSelf)
-            EnableMainMenu();
-    }
+{
+    if (mainMenu.activeSelf)
+        EnableLoginPage();
+    else if (joinPage.activeSelf)
+        EnableMainMenu();
+    else if (viewMeetingPage.activeSelf)
+        EnableMainMenu();
+    else if (scheduleMeetingPage.activeSelf)
+        EnableMainMenu();
+    else if (createPage.activeSelf)
+        EnableMainMenu();
+}
+ 
 
-    void EnableAccountValidation()
-    {
-        accountValidation.SetActive(true);
-        loginPage.SetActive(false);
-        registerPage.SetActive(false);
-        mainMenu.SetActive(false);
-        createPage.SetActive(false);
-        joinPage.SetActive(false);
-        viewMeetingPage.SetActive(false);
-        scheduleMeetingPage.SetActive(false);
-    }
 
     void EnableLoginPage()
     {
-        accountValidation.SetActive(false);
         loginPage.SetActive(true);
-        registerPage.SetActive(false);
-        mainMenu.SetActive(false);
-        createPage.SetActive(false);
-        joinPage.SetActive(false);
-        viewMeetingPage.SetActive(false);
-        scheduleMeetingPage.SetActive(false);
-    }
-
-    void EnableRegisterPage()
-    {
-        accountValidation.SetActive(false);
-        loginPage.SetActive(false);
-        registerPage.SetActive(true);
         mainMenu.SetActive(false);
         createPage.SetActive(false);
         joinPage.SetActive(false);
@@ -151,9 +112,7 @@ public class LobbyMenu : MonoBehaviour
 
     void EnableMainMenu()
     {
-        accountValidation.SetActive(false);
         loginPage.SetActive(false);
-        registerPage.SetActive(false);
         mainMenu.SetActive(true);
         createPage.SetActive(false);
         joinPage.SetActive(false);
