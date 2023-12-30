@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2290,7 +2290,7 @@ GameObject:
   - component: {fileID: 184861079}
   - component: {fileID: 184861078}
   m_Layer: 5
-  m_Name: Back
+  m_Name: LoginBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3374,7 +3374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 300075040}
   m_Layer: 5
-  m_Name: Login
+  m_Name: LoginPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5693,7 +5693,7 @@ GameObject:
   - component: {fileID: 556352770}
   - component: {fileID: 556352769}
   m_Layer: 5
-  m_Name: Back
+  m_Name: MeetingBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7099,7 +7099,7 @@ GameObject:
   m_Component:
   - component: {fileID: 659003921}
   m_Layer: 5
-  m_Name: Register
+  m_Name: RegisterPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9085,7 +9085,7 @@ GameObject:
   m_Component:
   - component: {fileID: 954370944}
   m_Layer: 5
-  m_Name: Menu
+  m_Name: MenuPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9202,7 +9202,7 @@ GameObject:
   - component: {fileID: 970899043}
   - component: {fileID: 970899042}
   m_Layer: 5
-  m_Name: Create
+  m_Name: MenuCreate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9765,7 +9765,7 @@ GameObject:
   - component: {fileID: 1067171812}
   - component: {fileID: 1067171811}
   m_Layer: 5
-  m_Name: Back
+  m_Name: CreateBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10233,7 +10233,7 @@ GameObject:
   - component: {fileID: 1086996605}
   - component: {fileID: 1086996604}
   m_Layer: 5
-  m_Name: Create
+  m_Name: CreateMeeting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10403,7 +10403,7 @@ GameObject:
   - component: {fileID: 1096057098}
   - component: {fileID: 1096057097}
   m_Layer: 5
-  m_Name: Back
+  m_Name: JoinBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12021,7 +12021,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1278497876}
   m_Layer: 5
-  m_Name: ScheduledMeeting
+  m_Name: MyMeetingPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12650,7 +12650,7 @@ GameObject:
   - component: {fileID: 1356667445}
   - component: {fileID: 1356667444}
   m_Layer: 5
-  m_Name: Back
+  m_Name: ScheduleBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13344,7 +13344,6 @@ GameObject:
   - component: {fileID: 1430216178}
   - component: {fileID: 1430216180}
   - component: {fileID: 1430216179}
-  - component: {fileID: 1430216181}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -13413,21 +13412,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1430216177}
   m_CullTransparentMesh: 1
---- !u!114 &1430216181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430216177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afbbe98f43d474147966ce46e503031b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cloudSave: {fileID: 1218895644}
-  mm: {fileID: 1742328620}
-  meetingsText: {fileID: 1430216179}
 --- !u!1001 &1460553481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14476,7 +14460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1601171392}
   m_Layer: 5
-  m_Name: Create
+  m_Name: CreatePage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14873,7 +14857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666344619}
   m_Layer: 5
-  m_Name: Join
+  m_Name: JoinPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16367,7 +16351,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1809448342}
   m_Layer: 5
-  m_Name: Schedule
+  m_Name: SchedulePage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16528,7 +16512,7 @@ GameObject:
   - component: {fileID: 1836584279}
   - component: {fileID: 1836584278}
   m_Layer: 5
-  m_Name: Join
+  m_Name: MenuJoin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16995,7 +16979,7 @@ GameObject:
   - component: {fileID: 1924307508}
   - component: {fileID: 1924307507}
   m_Layer: 5
-  m_Name: Back
+  m_Name: RegisterBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

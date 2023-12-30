@@ -47,6 +47,7 @@ public class LobbyMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TouchScreenKeyboard.Open("");       
         EnableAccountValidation();
 
         // Hook events
