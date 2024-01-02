@@ -57,7 +57,6 @@ public class NetworkConnect : MonoBehaviour
         DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
         lobbyOptions.Data.Add("JOIN_CODE", dataObject);
        
-        
         currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
         
         hostId = playerId; 
@@ -187,25 +186,16 @@ public class NetworkConnect : MonoBehaviour
         return joinedPlayers;
     }
 
-    // public void LeaveLobby()
-    // {
-    //     if (currentLobby != null && currentLobby.HostId == AuthenticationService.Instance.PlayerId)
-    //     {
-    //         try
-    //         {
-    //             await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
-    //             // For example, you can load a scene indicating that the player has left the lobby
-    //             SceneManager.LoadScene(0); // Load the main menu scene (or any other scene you prefer)
-    //         }
-    //         catch (LobbyServiceException e)
-    //         {
-    //             Debug.LogError("Error leaving lobby: " + e.Message);
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("No lobby to leave. Player is not currently in a lobby.");
-    //     }
-    // }
-
+    public void LeaveLobby(){
+        try{
+            LobbyService.Instance.RemovePlayerAsync(joinCode, playerId);
+            SceneManager.LoadScene(2);
+            Debug.Log("dah keluar");
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+            Debug.Log("takleh keluar");
+        }
+    }
 }
