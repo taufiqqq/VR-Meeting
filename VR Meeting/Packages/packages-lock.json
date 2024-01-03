@@ -7,6 +7,15 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.unity.ai.navigation": {
+      "version": "1.1.5",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.8.9",
       "depth": 1,
@@ -393,6 +402,12 @@
         "com.unity.xr.core-utils": "2.1.1"
       },
       "url": "https://packages.unity.com"
+    },
+    "com.whisper.unity": {
+      "version": "file:C:/Users/user/Desktop/unity-whisper-stt-master/Packages/com.whisper.unity",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

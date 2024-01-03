@@ -15,6 +15,7 @@ public class AuthManager : MonoBehaviour
     [SerializeField] private TMP_InputField passwordInput = default;
     [SerializeField] private TextMeshProUGUI errorMessageText = default;
     public float displayErrorDuration = 5f;
+    public LobbyMenu lobbyMenu;
 
     // Start is called before the first frame update
     async void Start()
@@ -32,6 +33,8 @@ public class AuthManager : MonoBehaviour
         string usernameText = usernameInput.text;
         string passwordText = passwordInput.text;
         await SignUpWithUsernameAndPassword(usernameText,passwordText);
+        if(IsUserSignedIn)
+        lobbyMenu.EnableMainMenu();
 
     }
 
@@ -40,10 +43,13 @@ public class AuthManager : MonoBehaviour
         string usernameText = usernameInput.text;
         string passwordText = passwordInput.text;
         await SignInWithUsernameAndPassword(usernameText,passwordText);
+        if(IsUserSignedIn)
+        lobbyMenu.EnableMainMenu();
     }
 
-    /*public async void SignOut(){
+    public async void SignOut(){
         await SignOutOfGame();
+        lobbyMenu.EnableLoginPage();
     }
 
     async Task SignOutOfGame()
@@ -62,7 +68,7 @@ public class AuthManager : MonoBehaviour
             ShowErrorMessage(ex.Message);
         }
 
-    }*/
+    }
 
     async Task SignUpWithUsernameAndPassword(string username,string password)
     {
@@ -70,6 +76,7 @@ public class AuthManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username,password);
             Debug.Log("Sign Up Successful");
+            IsUserSignedIn = true;
         }
         catch(AuthenticationException ex)
         {
