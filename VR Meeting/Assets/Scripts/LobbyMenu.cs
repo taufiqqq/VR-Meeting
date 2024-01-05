@@ -176,7 +176,7 @@ public class LobbyMenu : MonoBehaviour
 
     void ScheduleMeetingSubmit()
     {
-        cloudSave.SaveData();
+        cloudSave.SaveData("");
         EnableMainMenu();   
     }
 }
