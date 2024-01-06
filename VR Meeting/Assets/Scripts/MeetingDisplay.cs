@@ -1,66 +1,89 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class MeetingsDisplay : MonoBehaviour
 {
     public Text outputText;
     public RectTransform content;
 
-    private CloudSave cloudSave;
+    [SerializeField] private CloudSave cloudSave;
 
-    private void Start()
+    public async Task InitializeMeetingsDisplayAsync()
     {
-        cloudSave = FindObjectOfType<CloudSave>();
-        if (cloudSave != null)
+        try
         {
-            DisplayMeetings();
-        }
-        else
-        {
-            Debug.LogError("CloudSave script not found in the scene!");
-        }
-    }
+            Debug.Log("Attempting to initialize MeetingsDisplay...");
 
-    private void DisplayMeetings()
-    {
-        List<CloudSave.Meeting> meetings = cloudSave.GetMeetings().Result;
-
-        if (meetings != null && meetings.Count > 0)
-        {
-            string meetingsText = "Meetings:\n";
-
-            foreach (var meeting in meetings)
+            if (cloudSave == null)
             {
-                meetingsText += $"{meeting.title} - {meeting.dateTime}\n";
+                Debug.LogError("CloudSave component not found!");
+                return;
             }
 
-            outputText.text = meetingsText;
+            // Load meetings data from CloudSave
+            List<CloudSave.Meeting> meetings = await cloudSave.GetMeetings();
 
-            // Optionally, you can instantiate UI elements for each meeting in a scroll view
-            CreateUIElements(meetings);
+            if (meetings != null)
+            {
+                Debug.Log($"Successfully loaded {meetings.Count} meetings.");
+            }
+            else
+            {
+                Debug.LogWarning("No meetings loaded or an error occurred during loading.");
+            }
+
+            // Update UI with meetings data
+            UpdateMeetingsUI(meetings);
         }
-        else
+        catch (Exception e)
         {
-            outputText.text = "No meetings found.";
+            Debug.LogError($"Error during initialization: {e}");
         }
     }
 
-    private void CreateUIElements(List<CloudSave.Meeting> meetings)
+    private void UpdateMeetingsUI(List<CloudSave.Meeting> meetings)
     {
-        // Clear existing content
-        foreach (Transform child in content)
+        try
         {
-            Destroy(child.gameObject);
-        }
+            Debug.Log("Updating UI with meetings data...");
 
-        // Instantiate UI elements for each meeting
-        foreach (var meeting in meetings)
+            if (content == null)
+            {
+                Debug.LogError("Content RectTransform not assigned!");
+                return;
+            }
+
+            // Clear existing content
+            foreach (Transform child in content.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            if (meetings != null)
+            {
+                // Concatenate meeting information into a single string
+                string meetingsInfo = "";
+                foreach (var meeting in meetings)
+                {
+                    meetingsInfo += $"Date: {meeting.dateTime}, Title: {meeting.title}\n\n";
+                }
+
+                // Set the concatenated string to outputText
+                outputText.text = meetingsInfo;
+            }
+            else
+            {
+                Debug.LogWarning("No meetings data to display.");
+            }
+
+            Debug.Log("UI update complete.");
+        }
+        catch (Exception e)
         {
-            GameObject meetingTextObject = new GameObject("MeetingText", typeof(Text));
-            Text meetingText = meetingTextObject.GetComponent<Text>();
-            meetingText.text = $"{meeting.title} - {meeting.dateTime}";
-            meetingText.transform.SetParent(content, false);
+            Debug.LogError($"Error during UI update: {e}");
         }
     }
 }

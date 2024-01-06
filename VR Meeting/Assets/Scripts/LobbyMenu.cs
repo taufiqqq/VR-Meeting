@@ -37,6 +37,7 @@ public class LobbyMenu : MonoBehaviour
     // Other Components
     public NetworkConnect networkConnect;
     public CloudSave cloudSave;
+    public MeetingsDisplay meetingDisplay;
 
     public List<Button> returnButtons; // Use a list of return buttons
 
@@ -147,8 +148,10 @@ public class LobbyMenu : MonoBehaviour
         scheduleMeetingPage.SetActive(false);
     }
 
-    void EnableViewMeetingPage()
+    async void EnableViewMeetingPage()
     {
+        await meetingDisplay.InitializeMeetingsDisplayAsync(); // Use await here
+
         mainMenu.SetActive(false);
         createPage.SetActive(false);
         joinPage.SetActive(false);

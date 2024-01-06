@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   welcomeScreenVersion: '1.9.7 '
   playmakerVersion: 
-  showWelcomeScreen: 0
-  showUpgradeGuide: 1
-  lastAutoUpdateSignature: 2022.3.11f1__T:/GitHub/VR-Meeting/VR Meeting/Assets__0.0.0.0
+  showWelcomeScreen: 1
+  showUpgradeGuide: 0
+  lastAutoUpdateSignature: 2022.3.11f1__D:/GITHUBVR/VR-Meeting/VR Meeting/Assets__0.0.0.0
   useLegacyNetworking: 0
