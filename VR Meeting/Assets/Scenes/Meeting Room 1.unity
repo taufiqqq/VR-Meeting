@@ -12663,6 +12663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxConnection: 20
   transport: {fileID: 768726576}
+  markerSpawn: {fileID: 1883954224}
 --- !u!114 &768726576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29253,6 +29254,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 136942ee48118b0468572312efd0133d, type: 3}
+--- !u!1 &1883954223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883954225}
+  - component: {fileID: 1883954224}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1883954224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883954223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c44de417ff9f8da4cb6e4bbd1b35a16b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Marker: {fileID: 5179909933618550562, guid: 8c94757f3ef8179479ed7b03e35b24df, type: 3}
+--- !u!4 &1883954225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883954223}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.921, y: 2.487693, z: 12.421649}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1898776469
 GameObject:
   m_ObjectHideFlags: 0
@@ -33232,3 +33278,4 @@ SceneRoots:
   - {fileID: 1998444345}
   - {fileID: 1942695940}
   - {fileID: 407707112}
+  - {fileID: 1883954225}

@@ -11,6 +11,7 @@ using Unity.Services.Lobbies; //rectangular notation external actor (server side
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
 
+
 public class NetworkConnect : MonoBehaviour
 {
     private string joinCode;
@@ -25,6 +26,7 @@ public class NetworkConnect : MonoBehaviour
     private string playerId;
     private string hostId;
     private List<string> joinedPlayers = new List<string>(); // List to store joined player IDs
+    public Spawner markerSpawn;
 
     private async void Awake()
     {
@@ -69,6 +71,7 @@ public class NetworkConnect : MonoBehaviour
         Debug.Log("Number of Players in room : " + currentLobby.Players.Count);
         HandlePlayer();
         UpdateMaxPlayer(maxConnection);
+        markerSpawn.SpawnMarker();
 
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartHost();
@@ -100,7 +103,7 @@ public class NetworkConnect : MonoBehaviour
         Debug.LogError("My Player Id : " + playerId);
         Debug.Log("Number of Players in room : " + currentLobby.Players.Count);
         HandlePlayer();
-
+        markerSpawn.SpawnMarker();
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
         }
@@ -165,10 +168,12 @@ public class NetworkConnect : MonoBehaviour
         Debug.Log("Player joined: " + playerId);
         Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
 
+
         // Update your UI or perform other actions as needed
         UpdatePlayerList(joinedPlayers);
         
     }
+
 
     private void UpdatePlayerList(List<string> players)
     {

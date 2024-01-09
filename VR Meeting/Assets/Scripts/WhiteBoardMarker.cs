@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
+
 public class WhiteboardMarker : MonoBehaviour
 {
     [SerializeField] private Transform _tip;
@@ -18,7 +19,13 @@ public class WhiteboardMarker : MonoBehaviour
     private Vector2 _touchPos, _lastTouchPos;
     private bool _touchedLastFrame;
     private Quaternion _lastTouchRot;
-    
+    public GameObject Marker; 
+
+
+    public void SpawnMarker(){
+        Instantiate(Marker);
+    }
+
     void Start()
     {
         _renderer = _tip.GetComponent<Renderer>();
