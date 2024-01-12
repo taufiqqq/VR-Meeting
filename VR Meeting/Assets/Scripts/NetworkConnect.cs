@@ -24,19 +24,24 @@ public class NetworkConnect : MonoBehaviour
     public UnityTransport transport;
 
     public AuthManager authManager;
+    public Spawner markerSpawn;
     
      private async void Awake()
     {
         await UnityServices.InitializeAsync();
 
         // Subscribe to the sign-in complete event
+        
         AuthManager.Instance.OnSignInComplete += OnSignInComplete;
 
+        //  playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
+        //  Debug.Log("Player ID: " + playerId);
     }
 
     private void OnSignInComplete()
     {
         AuthManager.Instance.Create();
+
     }
 
     // Start is called before the first frame update
@@ -68,10 +73,14 @@ public class NetworkConnect : MonoBehaviour
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
             Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
-
-            joinCode = currentLobby.LobbyCode;
             
-            UpdateLobbyCode(joinCode);
+            playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
+            Debug.Log("Player ID: " + playerId);
+        
+            joinCode = currentLobby.LobbyCode;
+            HandlePlayer();
+            markerSpawn.SpawnMarker();
+            UpdateLobbyCode(currentLobby.LobbyCode);
             NetworkManager.Singleton.StartHost();
     }
     
@@ -100,6 +109,11 @@ public class NetworkConnect : MonoBehaviour
         Debug.LogError("Lobby ID : " + currentLobby.Id);
         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
         
+        playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
+        Debug.Log("Player ID: " + playerId);
+
+        HandlePlayer();
+        markerSpawn.SpawnMarker();
         UpdateLobbyCode(joinCode);
         NetworkManager.Singleton.StartClient();
         }
@@ -187,14 +201,16 @@ public class NetworkConnect : MonoBehaviour
         return false;
     }
 
-    private void HandlePlayerJoined(ulong clientId)
+    
+
+    private void HandlePlayer()
     {
-        string playerId = clientId.ToString(); // Convert the client ID to a string
         joinedPlayers.Add(playerId);
 
-        // You can do additional operations with the playerId if needed
+        // Log the joined player ID to the console
         Debug.Log("Player joined: " + playerId);
         Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
+
 
         // Update your UI or perform other actions as needed
         UpdatePlayerList(joinedPlayers);
@@ -202,31 +218,56 @@ public class NetworkConnect : MonoBehaviour
 
     private void UpdatePlayerList(List<string> players)
     {
-        // Example: Display the player list in the console
         Debug.Log("Player List:");
         foreach (string playerId in players)
         {
             Debug.Log(playerId);
+            PlayerList pl = FindObjectOfType<PlayerList>();
+            pl.UpdatePlayerList(players);
         }
-
-        // You can update your UI or perform other actions with the player list
     }
 
-    public async void LeaveRoom()
-    {
-        try
-        {
-            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
-            currentLobby = null;
+    public List<string> getPlayerList(){
+        return joinedPlayers;
+    }
 
+    public async void LeaveLobby(){
+        try{
+            await LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, playerId);
+            SceneManager.LoadScene(0);
+            Debug.Log("dah keluar");
         }
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
-            Debug.Log("taknak bye");
+            Debug.Log("takleh keluar");
         }
     }
 
+    // public async void KickPlayer()
+    // {
+    //     try
+    //     {
+    //         // Remove the player from the lobby
+    //         await LobbyService.Instance.RemovePlayerAsync(joinCode, joinedPlayers[1]);
+
+    //         // Update your UI or perform other actions as needed
+    //         Debug.Log("Player kicked out: " + joinedPlayers[1]);
+    //         joinedPlayers.Remove(joinedPlayers[1]);
+    //         UpdatePlayerList(joinedPlayers);
+    //     }
+    //     catch (LobbyServiceException e)
+    //     {
+    //         Debug.LogError("Failed to kick out player: " + e.Message);
+    //     }
+
+    // }
+
+    private void setIndexPlayer(){
+
+    }
+
+    
     public string getPlayerId(){
         return playerId;
     }

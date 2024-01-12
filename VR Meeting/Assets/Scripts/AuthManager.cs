@@ -18,6 +18,8 @@ public class AuthManager : MonoBehaviour
 
     public static AuthManager Instance;
 
+    public LobbyMenu lobbyMenu;
+
     private void Awake()
     {
         if (Instance == null)
@@ -44,22 +46,28 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    public async void Create()
+    public async void Create() //register
     {
         string usernameText = usernameInput.text;
         string passwordText = passwordInput.text;
         await SignUpWithUsernameAndPassword(usernameText,passwordText);
 
+        if(IsUserSignedIn)
+        lobbyMenu.EnableMainMenu();
+
     }
 
-    public async void SignIn()
+    public async void SignIn() //login
     {
         string usernameText = usernameInput.text;
         string passwordText = passwordInput.text;
         await SignInWithUsernameAndPassword(usernameText,passwordText);
+
+        if(IsUserSignedIn)
+        lobbyMenu.EnableMainMenu();
     }
 
-    /*public async void SignOut(){
+    public async void SignOut(){
         await SignOutOfGame();
     }
 
@@ -68,6 +76,8 @@ public class AuthManager : MonoBehaviour
         try
         {
             AuthenticationService.Instance.SignOut(true);
+            
+        IsUserSignedIn = false;
             Debug.Log("User is signed out");
         }
         catch(AuthenticationException ex)
@@ -79,14 +89,17 @@ public class AuthManager : MonoBehaviour
             ShowErrorMessage(ex.Message);
         }
 
-    }*/
+        lobbyMenu.EnableLoginPage();
 
-    async Task SignUpWithUsernameAndPassword(string username,string password)
+    }
+
+    async Task SignUpWithUsernameAndPassword(string username,string password) //register dgn username and password
     {
         try
         {
             await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username,password);
             Debug.Log("Sign Up Successful");
+            IsUserSignedIn = true;
         }
         catch(AuthenticationException ex)
         {
@@ -99,7 +112,7 @@ public class AuthManager : MonoBehaviour
 
     }
 
-     async Task SignInWithUsernameAndPassword(string username, string password)
+     async Task SignInWithUsernameAndPassword(string username, string password) //Login
     {
         try
         {

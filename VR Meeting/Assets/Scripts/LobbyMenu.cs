@@ -82,7 +82,7 @@ public class LobbyMenu : MonoBehaviour
  
 
 
-    void EnableLoginPage()
+   public void EnableLoginPage()
     {
         loginPage.SetActive(true);
         mainMenu.SetActive(false);
@@ -98,7 +98,7 @@ public class LobbyMenu : MonoBehaviour
         // Example: nc.Login(username, password);
 
         // Assuming successful login, enable the main menu
-        EnableMainMenu();
+       
     }
 
     void RegisterSubmit()
@@ -107,10 +107,10 @@ public class LobbyMenu : MonoBehaviour
         // Example: nc.Register(username, password);
 
         // Assuming successful registration, enable the main menu
-        EnableMainMenu();
+        
     }
 
-    void EnableMainMenu()
+    public void EnableMainMenu()
     {
         loginPage.SetActive(false);
         mainMenu.SetActive(true);
