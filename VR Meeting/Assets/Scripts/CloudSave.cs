@@ -77,7 +77,7 @@ public class CloudSave : MonoBehaviour
                 existingUser = new User
                 {
                     username = username,
-                    
+
                     meetings = new List<Meeting> { newMeeting }
                 };
 
@@ -120,29 +120,24 @@ public class CloudSave : MonoBehaviour
 
     public async Task<User> LoadUserData()
     {
-        var keysToLoad = new HashSet<string>
-        {
-            CLOUD_SAVE_USER_KEY
-        };
 
         try
         {
-            var loadedData = await CloudSaveService.Instance.Data.Player.LoadAsync(keysToLoad);
+            Debug.Log("Attempting to load existing data...");
 
-            // Add debug logs to check the loaded data
-            Debug.Log($"Loaded data: {loadedData}");
+            // Load user data
+            var cloudSaveData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> { CLOUD_SAVE_USER_KEY });
 
-            if (loadedData.TryGetValue(CLOUD_SAVE_USER_KEY, out var loadedUserObj) && loadedUserObj is Dictionary<string, Item>)
+            // Check if the specified key exists in the loaded data
+            if (cloudSaveData.TryGetValue(CLOUD_SAVE_USER_KEY, out var userData))
             {
-                // Add debug log to check the loadedUserObj before deserialization
-                Debug.Log($"Loaded user object: {loadedUserObj}");
-
-                return JsonUtility.FromJson<User>(JsonUtility.ToJson(loadedUserObj));
+                Debug.Log("Loaded existing data.");
+                return userData.Value.GetAs<User>();
             }
             else
             {
-                Debug.Log("User data not found in cloud save");
-                return null; // Return null if no user data found
+                Debug.Log("No existing data found.");
+                return null;
             }
         }
         catch (ServicesInitializationException e)
@@ -183,17 +178,20 @@ public class CloudSave : MonoBehaviour
 
         try
         {
-            var loadedData = await CloudSaveService.Instance.Data.LoadAsync(keysToLoad);
-            Debug.Log($"Loaded data: {loadedData}");
+            Debug.Log("Attempting to get meetings...");
 
-            if (loadedData.TryGetValue(CLOUD_SAVE_USER_KEY, out var loadedUserObj) && loadedUserObj is Dictionary<string, object>)
-            {Debug.Log($"Loaded user object: {loadedUserObj}");
-                var loadedUserData = JsonUtility.FromJson<User>(JsonUtility.ToJson(loadedUserObj));
+            // Load user data
+            var cloudSaveData = await CloudSaveService.Instance.Data.Player.LoadAsync(keysToLoad);
 
-                return loadedUserData.meetings;
+            // Check if the specified key exists in the loaded data
+            if (cloudSaveData.TryGetValue(CLOUD_SAVE_USER_KEY, out var userData))
+            {
+                Debug.Log("Meetings loaded successfully.");
+                return userData.Value.GetAs<User>().meetings;
             }
             else
-            {Debug.Log("User data not found in cloud save");
+            {
+                Debug.Log("No meetings found.");
                 return new List<Meeting>();
             }
         }
@@ -204,45 +202,46 @@ public class CloudSave : MonoBehaviour
         }
     }
 
+
     // Update the method in CloudSave.cs
-// public async void AddAttendeeToMeeting(string attendeePlayerId, Meeting meetingToAdd)
-// {
-//     try
-//     {
-//         var hostPlayerId = networkConnect.getPlayerId();
+    // public async void AddAttendeeToMeeting(string attendeePlayerId, Meeting meetingToAdd)
+    // {
+    //     try
+    //     {
+    //         var hostPlayerId = networkConnect.getPlayerId();
 
-//         // Prepare CloudScript request
-//         var request = new ExecuteCloudScriptRequest
-//         {
-//             FunctionName = "addAttendeeToMeeting",
-//             FunctionParameter = new Dictionary<string, object>
-//             {
-//                 { "hostPlayerId", hostPlayerId },
-//                 { "attendeePlayerId", attendeePlayerId },
-//                 { "meetingToAdd", meetingToAdd.ToJson() }
-//             }
-//         };
+    //         // Prepare CloudScript request
+    //         var request = new ExecuteCloudScriptRequest
+    //         {
+    //             FunctionName = "addAttendeeToMeeting",
+    //             FunctionParameter = new Dictionary<string, object>
+    //             {
+    //                 { "hostPlayerId", hostPlayerId },
+    //                 { "attendeePlayerId", attendeePlayerId },
+    //                 { "meetingToAdd", meetingToAdd.ToJson() }
+    //             }
+    //         };
 
-//         // Execute CloudScript function
-//         var response = await CloudCodeService.Instance.CallEndpointAsync<string>("AddAttendeeToMeeting", request.FunctionParameter);
+    //         // Execute CloudScript function
+    //         var response = await CloudCodeService.Instance.CallEndpointAsync<string>("AddAttendeeToMeeting", request.FunctionParameter);
 
-//         // Handle CloudScript response
-//         if (response != null)
-//         {
-//             Debug.Log("Attendee added successfully!");
-//             // Update UI to reflect successful addition
-//         }
-//         else
-//         {
-//             Debug.LogError("Failed to add attendee.");
-//             // Handle error gracefully
-//         }
-//     }
-//     catch (Exception ex)
-//     {
-//         Debug.LogError("Unexpected error: " + ex.Message);
-//         // Handle unexpected errors
-//     }
-// }
+    //         // Handle CloudScript response
+    //         if (response != null)
+    //         {
+    //             Debug.Log("Attendee added successfully!");
+    //             // Update UI to reflect successful addition
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("Failed to add attendee.");
+    //             // Handle error gracefully
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Debug.LogError("Unexpected error: " + ex.Message);
+    //         // Handle unexpected errors
+    //     }
+    // }
 
 }

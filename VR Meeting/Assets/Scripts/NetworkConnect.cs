@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -121,17 +122,35 @@ public class NetworkConnect : MonoBehaviour
 
     private void Update()
     {
-        if (heartBeatTimer > 15)
+        try
         {
-            heartBeatTimer -= 15;
-            if (currentLobby != null && currentLobby.HostId == AuthenticationService.Instance.PlayerId)
-                LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
-                Debug.LogError(currentLobby.Id);
-                Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+            if (heartBeatTimer > 15)
+            {
+                heartBeatTimer -= 15;
+
+                if (currentLobby != null)
+                {
+                    if (currentLobby.HostId == AuthenticationService.Instance.PlayerId)
+                    {
+                        LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
+                        Debug.LogError(currentLobby.Id);
+                        Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+                    }
+                }
+                else
+                {
+                    // Handle the case when currentLobby is null (e.g., the main lobby)
+                    Debug.LogWarning("Current lobby is null (Main Lobby)");
+                }
+            }
+            heartBeatTimer += Time.deltaTime;
         }
-        heartBeatTimer += Time.deltaTime;
-        
+        catch (Exception e)
+        {
+            Debug.LogError($"An error occurred: {e}");
         }
+    }
+
 
     public void setJoinCode(string data)
     {
