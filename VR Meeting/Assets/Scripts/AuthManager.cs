@@ -117,9 +117,10 @@ public class AuthManager : MonoBehaviour
         try
         {
             await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+            await AuthenticationService.Instance.UpdatePlayerNameAsync(username);
+
             Debug.Log("Sign In Successful");
             IsUserSignedIn = true;
-
             // Notify subscribers that sign-in is complete
             OnSignInComplete?.Invoke();
         }
@@ -154,5 +155,10 @@ public class AuthManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public Task<string> GetUserName()
+    {
+        return AuthenticationService.Instance.GetPlayerNameAsync();
     }
 }

@@ -18,6 +18,8 @@ public class NetworkConnect : MonoBehaviour
     private Lobby currentLobby;
     private float heartBeatTimer;
     private string playerId;
+    private string playerName;
+    private int lobbyBackground = 1;
 
     private List<string> joinedPlayers = new List<string>();
 
@@ -25,18 +27,13 @@ public class NetworkConnect : MonoBehaviour
     public UnityTransport transport;
 
     public AuthManager authManager;
+    public CloudSave cloudSave;
     public Spawner markerSpawn;
     
      private async void Awake()
     {
         await UnityServices.InitializeAsync();
-
-        // Subscribe to the sign-in complete event
-        
         AuthManager.Instance.OnSignInComplete += OnSignInComplete;
-
-        //  playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
-        //  Debug.Log("Player ID: " + playerId);
     }
 
     private void OnSignInComplete()
@@ -49,7 +46,7 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Create()
     {
-            SceneManager.LoadScene(2);
+            SceneManager.LoadScene(lobbyBackground);
 
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
             string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
@@ -67,9 +64,12 @@ public class NetworkConnect : MonoBehaviour
 
             string hostName = "admin"; // Replace with the actual host name
             DataObject hostNameDataObject = new DataObject(DataObject.VisibilityOptions.Public, hostName);
-            
+        
+            DataObject lobbyBGDataObject = new DataObject(DataObject.VisibilityOptions.Public, lobbyBackground.ToString());
+        
             lobbyOptions.Data.Add("JOIN_CODE", dataObject);
             lobbyOptions.Data.Add("HOST_NAME", hostNameDataObject);
+            lobbyOptions.Data.Add("LOBBY_BG", lobbyBGDataObject);
 
             currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
 
@@ -83,6 +83,7 @@ public class NetworkConnect : MonoBehaviour
             markerSpawn.SpawnMarker();
             UpdateLobbyCode(currentLobby.LobbyCode);
             NetworkManager.Singleton.StartHost();
+            UpdateLobbyCode(joinCode);
     }
     
 
@@ -94,13 +95,14 @@ public class NetworkConnect : MonoBehaviour
         try
         {
             currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
-            SceneManager.LoadScene(2);
+                Debug.LogWarning("dapat we");
+            
         }
         catch (LobbyServiceException e)
         {
             Debug.LogError(e);
         }
-
+                
         string relayJoinCode = currentLobby.Data["JOIN_CODE"].Value;
         Debug.LogError(relayJoinCode);
         JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
@@ -115,8 +117,13 @@ public class NetworkConnect : MonoBehaviour
 
         HandlePlayer();
         markerSpawn.SpawnMarker();
+        Debug.LogError(currentLobby.Data["LOBBY_BG"].Value);
+
+        lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
+        SceneManager.LoadScene(lobbyBackground);
+
+         NetworkManager.Singleton.StartClient();
         UpdateLobbyCode(joinCode);
-        NetworkManager.Singleton.StartClient();
         }
     }
 
@@ -155,19 +162,39 @@ public class NetworkConnect : MonoBehaviour
     public void setJoinCode(string data)
     {
         joinCode = data;
-        // You can perform additional network-related operations if needed
     }
 
     public string getJoinCode()
     {
         return joinCode;
     }
+
     private void UpdateLobbyCode(string lobbyCode)
     {
+        if (lobbyCode == null)
+        {
+            Debug.LogError("Error: Lobby code is null.");
+            return;
+        }
+
         DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
 
-        displayJoinCode.UpdateLobbyCode(lobbyCode);
+        if (displayJoinCode == null)
+        {
+            Debug.LogError("Error: DisplayJoinCode not found in the scene.");
+            return;
+        }
+
+        try
+        {
+            displayJoinCode.UpdateLobbyCode(lobbyCode);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error updating lobby code: {e}");
+        }
     }
+
 
     public async void ListLobbies()
     {
@@ -290,4 +317,36 @@ public class NetworkConnect : MonoBehaviour
     public string getPlayerId(){
         return playerId;
     }
+
+    public string getPlayerName()
+    {
+        return playerId;
+    }
+
+    public async void SaveReminder()
+    {
+        cloudSave.SaveData(await authManager.GetUserName(), "");
+    }
+
+    public void SignIn()
+    {
+        authManager.SignIn();
+    }
+
+    public void Register()
+    {
+        authManager.Create();
+    }
+
+    public void SetLobbyBackground(int i)
+    {
+        lobbyBackground = i;
+    }
+
+    public int GetLobbyBackground()
+    {
+        return lobbyBackground;
+    }
+
+
 }

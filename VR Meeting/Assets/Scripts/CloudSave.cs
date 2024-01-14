@@ -15,8 +15,6 @@ public class CloudSave : MonoBehaviour
     public TMP_InputField meetingTimeInput;
     public TMP_InputField meetingTitleInput;
 
-    public NetworkConnect networkConnect;
-
     [System.Serializable]
     public class User
     {
@@ -40,10 +38,9 @@ public class CloudSave : MonoBehaviour
         return DateTime.TryParseExact(date + " " + time, "dd/MM/yyyy hhmmtt", null, System.Globalization.DateTimeStyles.None, out parsedDateTime);
     }
 
-    public async void SaveData(string attendeeUsername)
+    public async void SaveData(string hostName, string attendeeUsername)
     {
-        var username = networkConnect.getPlayerId();
-
+        var username = hostName;
         try
         {
             Debug.Log("Attempting to load existing data...");
@@ -162,9 +159,9 @@ public class CloudSave : MonoBehaviour
         }
     }
 
-    public void OnSaveButtonClicked(string attendeeUsername)
+    public void OnSaveButtonClicked(string hostName, string attendeeUsername)
     {
-        SaveData(attendeeUsername);
+        SaveData(hostName, attendeeUsername);
     }
 
     public void OnLoadUserDataButtonClicked()
@@ -206,42 +203,7 @@ public class CloudSave : MonoBehaviour
     // Update the method in CloudSave.cs
     // public async void AddAttendeeToMeeting(string attendeePlayerId, Meeting meetingToAdd)
     // {
-    //     try
-    //     {
-    //         var hostPlayerId = networkConnect.getPlayerId();
-
-    //         // Prepare CloudScript request
-    //         var request = new ExecuteCloudScriptRequest
-    //         {
-    //             FunctionName = "addAttendeeToMeeting",
-    //             FunctionParameter = new Dictionary<string, object>
-    //             {
-    //                 { "hostPlayerId", hostPlayerId },
-    //                 { "attendeePlayerId", attendeePlayerId },
-    //                 { "meetingToAdd", meetingToAdd.ToJson() }
-    //             }
-    //         };
-
-    //         // Execute CloudScript function
-    //         var response = await CloudCodeService.Instance.CallEndpointAsync<string>("AddAttendeeToMeeting", request.FunctionParameter);
-
-    //         // Handle CloudScript response
-    //         if (response != null)
-    //         {
-    //             Debug.Log("Attendee added successfully!");
-    //             // Update UI to reflect successful addition
-    //         }
-    //         else
-    //         {
-    //             Debug.LogError("Failed to add attendee.");
-    //             // Handle error gracefully
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Debug.LogError("Unexpected error: " + ex.Message);
-    //         // Handle unexpected errors
-    //     }
+    //     
     // }
 
 }
