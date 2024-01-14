@@ -66,7 +66,10 @@ namespace HutongGames.PlayMaker.Actions
 
             if (relativeTo.Value == null)
             {
-                switch (mapToPlane)
+
+                relativeTo.Value = Camera.main.gameObject;
+                
+                /*switch (mapToPlane)
                 {
                     case AxisPlane.XZ:
                         forward = Vector3.forward;
@@ -82,10 +85,9 @@ namespace HutongGames.PlayMaker.Actions
                         forward = Vector3.up;
                         right = Vector3.forward;
                         break;
-                }
+                }*/
             }
-            else
-            {
+            
                 var transform = relativeTo.Value.transform;
 
                 switch (mapToPlane)
@@ -110,7 +112,7 @@ namespace HutongGames.PlayMaker.Actions
                 // Right vector relative to the object
                 // Always orthogonal to the forward vector
 
-            }
+            
 
             // calculate resulting direction vector
 
