@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
 
-public class PlayerMeshChanger : MonoBehaviour
+public class NetworkPlayerMeshChanger : NetworkBehaviour
 {
     [SerializeField] private GameObject newMeshPrefab; // Reference to the new mesh prefab in the project
 
@@ -88,6 +88,14 @@ public class PlayerMeshChanger : MonoBehaviour
 
     public void ChangeMeshPrefab(GameObject NewnewMeshPrefab)
     {
-        newMeshPrefab = NewnewMeshPrefab;
+        // Check if the current instance is the owner before changing the mesh
+        if (IsOwner)
+        {
+            newMeshPrefab = NewnewMeshPrefab;
+        }
+        else
+        {
+            Debug.LogWarning("Attempted to change mesh on a non-owner client.");
+        }
     }
 }

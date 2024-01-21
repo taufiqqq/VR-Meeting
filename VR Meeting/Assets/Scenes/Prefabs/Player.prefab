@@ -1407,25 +1407,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8869580228546004634}
     m_Modifications:
-    - target: {fileID: 234861354918339406, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1575239314742418325, guid: 16473f43812661341920dddb2e5e8fee,
         type: 3}
       propertyPath: m_Name
       value: RPM Avatar
-      objectReference: {fileID: 0}
-    - target: {fileID: 3211199168961953132, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3769722178183200270, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3769722178183200270, guid: 16473f43812661341920dddb2e5e8fee,
         type: 3}
@@ -1482,40 +1467,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: newMeshPrefab
-      value: 
-      objectReference: {fileID: 1500119803639240061, guid: a36a6413d4dc2294cb76a2d3ad448c60,
-        type: 3}
-    - target: {fileID: 7765620862567338900, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: m_BlendShapeWeights.Array.size
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8602673898813217465, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8602673898813217465, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: SyncScaleX
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8602673898813217465, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: SyncScaleY
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8602673898813217465, guid: 16473f43812661341920dddb2e5e8fee,
-        type: 3}
-      propertyPath: SyncScaleZ
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7639848674410038061, guid: 16473f43812661341920dddb2e5e8fee, type: 3}
-    - {fileID: 9019960469130735481, guid: 16473f43812661341920dddb2e5e8fee, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

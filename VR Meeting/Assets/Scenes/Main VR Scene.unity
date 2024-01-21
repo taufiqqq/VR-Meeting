@@ -25665,9 +25665,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
+      - m_Target: {fileID: 6364499439590368914, guid: 16473f43812661341920dddb2e5e8fee,
           type: 3}
-        m_TargetAssemblyTypeName: PlayerMeshChanger, Assembly-CSharp
+        m_TargetAssemblyTypeName: NetworkPlayerMeshChanger, Assembly-CSharp
         m_MethodName: ChangeMeshPrefab
         m_Mode: 2
         m_Arguments:
@@ -27224,9 +27224,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
+      - m_Target: {fileID: 6364499439590368914, guid: 16473f43812661341920dddb2e5e8fee,
           type: 3}
-        m_TargetAssemblyTypeName: PlayerMeshChanger, Assembly-CSharp
+        m_TargetAssemblyTypeName: NetworkPlayerMeshChanger, Assembly-CSharp
         m_MethodName: ChangeMeshPrefab
         m_Mode: 2
         m_Arguments:
@@ -38521,9 +38521,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
+      - m_Target: {fileID: 6364499439590368914, guid: 16473f43812661341920dddb2e5e8fee,
           type: 3}
-        m_TargetAssemblyTypeName: PlayerMeshChanger, Assembly-CSharp
+        m_TargetAssemblyTypeName: NetworkPlayerMeshChanger, Assembly-CSharp
         m_MethodName: ChangeMeshPrefab
         m_Mode: 2
         m_Arguments:
@@ -48106,9 +48106,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
+      - m_Target: {fileID: 6364499439590368914, guid: 16473f43812661341920dddb2e5e8fee,
           type: 3}
-        m_TargetAssemblyTypeName: PlayerMeshChanger, Assembly-CSharp
+        m_TargetAssemblyTypeName: NetworkPlayerMeshChanger, Assembly-CSharp
         m_MethodName: ChangeMeshPrefab
         m_Mode: 2
         m_Arguments:
@@ -49105,9 +49105,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 5374465068494985070, guid: 16473f43812661341920dddb2e5e8fee,
+      - m_Target: {fileID: 6364499439590368914, guid: 16473f43812661341920dddb2e5e8fee,
           type: 3}
-        m_TargetAssemblyTypeName: PlayerMeshChanger, Assembly-CSharp
+        m_TargetAssemblyTypeName: NetworkPlayerMeshChanger, Assembly-CSharp
         m_MethodName: ChangeMeshPrefab
         m_Mode: 2
         m_Arguments:
