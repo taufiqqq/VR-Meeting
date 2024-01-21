@@ -46,8 +46,6 @@ public class NetworkConnect : MonoBehaviour
 
     public async void Create()
     {
-        StartCoroutine(LoadSceneAsync(lobbyBackground));
-
         Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
         string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
         Debug.Log(newJoinCode);
@@ -79,11 +77,10 @@ public class NetworkConnect : MonoBehaviour
         Debug.Log("Player ID: " + playerId);
 
         joinCode = currentLobby.LobbyCode;
-        HandlePlayer();
-        markerSpawn.SpawnMarker();
+
+        StartCoroutine(LoadSceneAsync(lobbyBackground));
 
         NetworkManager.Singleton.StartHost();
-        UpdateLobbyCode(joinCode);
     }
 
 
@@ -116,18 +113,16 @@ public class NetworkConnect : MonoBehaviour
             playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
             Debug.Log("Player ID: " + playerId);
 
-
+            joinCode = currentLobby.LobbyCode;
             Debug.LogError(currentLobby.Data["LOBBY_BG"].Value);
 
             lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
 
             StartCoroutine(LoadSceneAsync(lobbyBackground));
 
-            joinCode = currentLobby.LobbyCode;
             //HandlePlayer();
-            markerSpawn.SpawnMarker();
             NetworkManager.Singleton.StartClient();
-            UpdateLobbyCode(joinCode);
+            
         }
     }
 
@@ -371,8 +366,8 @@ public class NetworkConnect : MonoBehaviour
         // The scene is now loaded
         Debug.Log("Scene loaded: " + sceneNumber);
 
-        // Add any additional logic that needs to run after the scene is loaded
-        // ...
+            markerSpawn.SpawnMarker();
+            UpdateLobbyCode(joinCode);
     }
 
 }
