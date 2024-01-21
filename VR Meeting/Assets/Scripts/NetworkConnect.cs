@@ -78,9 +78,7 @@ public class NetworkConnect : MonoBehaviour
 
         joinCode = currentLobby.LobbyCode;
 
-        StartCoroutine(LoadSceneAsync(lobbyBackground));
-
-        NetworkManager.Singleton.StartHost();
+        StartCoroutine(LoadSceneAsync(lobbyBackground, 0));
     }
 
 
@@ -118,10 +116,9 @@ public class NetworkConnect : MonoBehaviour
 
             lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
 
-            StartCoroutine(LoadSceneAsync(lobbyBackground));
+            StartCoroutine(LoadSceneAsync(lobbyBackground, 1));
 
-            //HandlePlayer();
-            NetworkManager.Singleton.StartClient();
+            
             
         }
     }
@@ -354,7 +351,7 @@ public class NetworkConnect : MonoBehaviour
         return lobbyBackground;
     }
 
-    private IEnumerator LoadSceneAsync(int sceneNumber)
+    private IEnumerator LoadSceneAsync(int sceneNumber, int condition)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneNumber);
 
@@ -367,7 +364,14 @@ public class NetworkConnect : MonoBehaviour
         Debug.Log("Scene loaded: " + sceneNumber);
 
             markerSpawn.SpawnMarker();
+            HandlePlayer();             //TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
             UpdateLobbyCode(joinCode);
+
+        if (condition==0)
+
+            NetworkManager.Singleton.StartHost();
+        else
+            NetworkManager.Singleton.StartClient();
     }
 
 }
