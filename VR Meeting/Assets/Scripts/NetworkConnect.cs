@@ -123,7 +123,8 @@ public class NetworkConnect : MonoBehaviour
 
             StartCoroutine(LoadSceneAsync(lobbyBackground));
 
-            HandlePlayer();
+            joinCode = currentLobby.LobbyCode;
+            //HandlePlayer();
             markerSpawn.SpawnMarker();
             NetworkManager.Singleton.StartClient();
             UpdateLobbyCode(joinCode);
@@ -181,14 +182,7 @@ public class NetworkConnect : MonoBehaviour
         }
 
         DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
-
-        if (displayJoinCode == null)
-        {
-            Debug.LogError("Error: DisplayJoinCode not found in the scene.");
-            return;
-        }
-
-        try
+ try
         {
             displayJoinCode.UpdateLobbyCode(lobbyCode);
         }
@@ -196,6 +190,14 @@ public class NetworkConnect : MonoBehaviour
         {
             Debug.LogError($"Error updating lobby code: {e}");
         }
+
+        if (displayJoinCode == null)
+        {
+            Debug.LogError("Error: DisplayJoinCode not found in the scene.");
+            return;
+        }
+
+       
     }
 
 
