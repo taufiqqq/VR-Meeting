@@ -11,11 +11,12 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Services.Lobbies; //rectangular notation external actor (server side)
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class NetworkConnect : MonoBehaviour
 {
     private string joinCode;
-    private Lobby currentLobby;
+    private static Lobby currentLobby;
     private float heartBeatTimer;
     private string playerId;
     private string playerName;
@@ -28,7 +29,8 @@ public class NetworkConnect : MonoBehaviour
 
     public AuthManager authManager;
     public CloudSave cloudSave;
-    public Spawner markerSpawn;
+
+    public markerSpawn marker;
 
     private async void Awake()
     {
@@ -118,8 +120,6 @@ public class NetworkConnect : MonoBehaviour
 
             StartCoroutine(LoadSceneAsync(lobbyBackground, 1));
 
-            
-            
         }
     }
 
@@ -174,7 +174,7 @@ public class NetworkConnect : MonoBehaviour
         }
 
         DisplayJoinCode displayJoinCode = FindObjectOfType<DisplayJoinCode>();
- try
+        try
         {
             displayJoinCode.UpdateLobbyCode(lobbyCode);
         }
@@ -189,7 +189,7 @@ public class NetworkConnect : MonoBehaviour
             return;
         }
 
-       
+
     }
 
 
@@ -233,20 +233,6 @@ public class NetworkConnect : MonoBehaviour
         return maxConnection;
     }
 
-
-    private bool IsHost()
-    {
-
-        if (currentLobby != null && currentLobby.HostId == playerId)
-        {
-            Debug.Log("this is Host ");
-            return true;
-        }
-        return false;
-    }
-
-
-
     private void HandlePlayer()
     {
         joinedPlayers.Add(playerId);
@@ -254,7 +240,6 @@ public class NetworkConnect : MonoBehaviour
         // Log the joined player ID to the console
         Debug.Log("Player joined: " + playerId);
         Debug.Log("Total players in the lobby: " + joinedPlayers.Count);
-
 
         // Update your UI or perform other actions as needed
         UpdatePlayerList(joinedPlayers);
@@ -276,43 +261,27 @@ public class NetworkConnect : MonoBehaviour
         return joinedPlayers;
     }
 
-    public async void LeaveLobby()
+    public void LeaveLobby()
     {
         try
         {
-            await LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, playerId);
-            SceneManager.LoadScene(0);
-            Debug.Log("dah keluar");
+            if (currentLobby != null)
+            {
+                LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, playerId);
+                AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(0);
+                authManager.SignOut();
+                Debug.Log("dah keluar");
+            }
+            else
+            {
+                Debug.LogError("currentLobby is null. Cannot leave lobby.");
+            }
         }
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
             Debug.Log("takleh keluar");
         }
-    }
-
-    // public async void KickPlayer()
-    // {
-    //     try
-    //     {
-    //         // Remove the player from the lobby
-    //         await LobbyService.Instance.RemovePlayerAsync(joinCode, joinedPlayers[1]);
-
-    //         // Update your UI or perform other actions as needed
-    //         Debug.Log("Player kicked out: " + joinedPlayers[1]);
-    //         joinedPlayers.Remove(joinedPlayers[1]);
-    //         UpdatePlayerList(joinedPlayers);
-    //     }
-    //     catch (LobbyServiceException e)
-    //     {
-    //         Debug.LogError("Failed to kick out player: " + e.Message);
-    //     }
-
-    // }
-
-    private void setIndexPlayer()
-    {
-
     }
 
 
@@ -363,15 +332,25 @@ public class NetworkConnect : MonoBehaviour
         // The scene is now loaded
         Debug.Log("Scene loaded: " + sceneNumber);
 
-            markerSpawn.SpawnMarker();
-            HandlePlayer();             //TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
-            UpdateLobbyCode(joinCode);
+        HandlePlayer();             //TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
+        UpdateLobbyCode(joinCode);
 
-        if (condition==0)
+        if (condition == 0)
+        {
 
             NetworkManager.Singleton.StartHost();
+            markerSpawn();
+        }
         else
+        {
             NetworkManager.Singleton.StartClient();
+            markerSpawn();
+        }
+    }
+
+    private void markerSpawn()
+    {
+        marker.OnNetworkSpawn();
     }
 
 }

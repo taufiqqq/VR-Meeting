@@ -5080,6 +5080,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400233657}
   - component: {fileID: 400233656}
+  - component: {fileID: 400233658}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -5099,7 +5100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea0c76062de61d8478d3e78d4440bc10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Marker: {fileID: 5567106186824582766, guid: 59afe8e9f1d199b419afdfb7dc2bd02a, type: 3}
+  marker: {fileID: 0}
+  DestroyWithSpawner: 0
 --- !u!4 &400233657
 Transform:
   m_ObjectHideFlags: 0
@@ -5115,6 +5117,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &400233658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400233655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 2294162564
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &420049084
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17624,7 +17646,8 @@ MonoBehaviour:
   transport: {fileID: 1528971332}
   authManager: {fileID: 347025016}
   cloudSave: {fileID: 1218895644}
-  markerSpawn: {fileID: 400233656}
+  marker: {fileID: 0}
+  lobbyMenu: {fileID: 1324643065}
 --- !u!114 &1528971336
 MonoBehaviour:
   m_ObjectHideFlags: 0

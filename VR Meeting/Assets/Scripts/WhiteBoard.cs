@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class WhiteBoard : MonoBehaviour
+public class WhiteBoard : NetworkBehaviour
 {
     public Texture2D texture;
     public Vector2 textureSize = new Vector2(2048, 2048);

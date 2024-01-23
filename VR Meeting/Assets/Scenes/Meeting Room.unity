@@ -215,7 +215,7 @@ MonoBehaviour:
   transport: {fileID: 2102839297}
   authManager: {fileID: 0}
   cloudSave: {fileID: 0}
-  markerSpawn: {fileID: 0}
+  marker: {fileID: 0}
 --- !u!114 &110264425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4579,27 +4579,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1218502736}
-  - component: {fileID: 1218502735}
+  - component: {fileID: 1218502738}
+  - component: {fileID: 1218502737}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Marker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1218502735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1218502734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0c76062de61d8478d3e78d4440bc10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Marker: {fileID: 5567106186824582766, guid: 59afe8e9f1d199b419afdfb7dc2bd02a, type: 3}
 --- !u!4 &1218502736
 Transform:
   m_ObjectHideFlags: 0
@@ -4615,6 +4603,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1218502737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218502734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3888251022
+  AlwaysReplicateAsRoot: 1
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 1
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &1218502738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218502734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0c76062de61d8478d3e78d4440bc10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  marker: {fileID: 5567106186824582766, guid: 59afe8e9f1d199b419afdfb7dc2bd02a, type: 3}
+  DestroyWithSpawner: 0
 --- !u!1 &1233887255
 GameObject:
   m_ObjectHideFlags: 0
@@ -7140,7 +7162,7 @@ MonoBehaviour:
   transport: {fileID: 2102839297}
   authManager: {fileID: 1038586688}
   cloudSave: {fileID: 0}
-  markerSpawn: {fileID: 1218502735}
+  marker: {fileID: 1218502738}
 --- !u!114 &2102839297
 MonoBehaviour:
   m_ObjectHideFlags: 0
