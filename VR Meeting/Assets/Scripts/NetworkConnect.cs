@@ -50,6 +50,7 @@ public class NetworkConnect : MonoBehaviour
 
     public async Task Create()
     {
+
         try
         {
             if (maxConnection > 0 && maxConnection <= 20)
@@ -298,6 +299,7 @@ public class NetworkConnect : MonoBehaviour
                                                         playerId);
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(0);
                 authManager.SignOut();
+                NetworkManager.Singleton.Shutdown();
                 Debug.Log("dah keluar");
             }
             else
