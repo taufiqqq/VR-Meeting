@@ -161,25 +161,14 @@ public class LobbyMenu : MonoBehaviour
 
     void CreateMeetingSubmit()
     {
-        // Implement your create meeting logic using nc
-        // Example: nc.CreateMeeting(meetingDetails);
-
-        // Assuming successful meeting creation, enable the main menu
-        EnableMainMenu();
     }
 
     void JoinMeetingSubmit()
     {
-        // Implement your join meeting logic using nc
-        // Example: nc.JoinMeeting(meetingCode);
-
-        // Assuming successful meeting join, enable the main menu
-        EnableMainMenu();
     }
 
     void ScheduleMeetingSubmit()
     {
         cloudSave.SaveData("", "");
-        EnableMainMenu();   
     }
 }

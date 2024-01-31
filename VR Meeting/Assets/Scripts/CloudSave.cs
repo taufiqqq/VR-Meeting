@@ -14,6 +14,7 @@ public class CloudSave : MonoBehaviour
     public TMP_InputField meetingDateInput;
     public TMP_InputField meetingTimeInput;
     public TMP_InputField meetingTitleInput;
+    public TMP_Text errorText;
 
     [System.Serializable]
     public class User
@@ -49,6 +50,13 @@ public class CloudSave : MonoBehaviour
             User existingUser = await LoadUserData();
 
             Debug.Log("Loaded existing data.");
+
+            if (!ValidateDateTimeFormat(meetingDateInput.text, meetingTimeInput.text))
+            {
+                // Display an error if the date and time format is invalid
+                DisplayError("Invalid date or time format. Please use the shown format");
+                return;
+            }
 
             var newMeeting = new Meeting
             {
@@ -100,18 +108,22 @@ public class CloudSave : MonoBehaviour
         catch (ServicesInitializationException e)
         {
             Debug.LogError(e);
+            DisplayError("Services Initialization Error");
         }
         catch (CloudSaveValidationException e)
         {
             Debug.LogError(e);
+            DisplayError("Validation Error");
         }
         catch (CloudSaveRateLimitedException e)
         {
             Debug.LogError(e);
+            DisplayError("Rate Limited Error");
         }
         catch (CloudSaveException e)
         {
             Debug.LogError(e);
+            DisplayError("Cloud Save Error");
         }
     }
 
@@ -140,21 +152,25 @@ public class CloudSave : MonoBehaviour
         catch (ServicesInitializationException e)
         {
             Debug.LogError(e);
+            DisplayError("Services Initialization Error");
             return null;
         }
         catch (CloudSaveValidationException e)
         {
             Debug.LogError(e);
+            DisplayError("Validation Error");
             return null;
         }
         catch (CloudSaveRateLimitedException e)
         {
             Debug.LogError(e);
+            DisplayError("Rate Limited Error");
             return null;
         }
         catch (CloudSaveException e)
         {
             Debug.LogError(e);
+            DisplayError("Cloud Save Error");
             return null;
         }
     }
@@ -199,7 +215,17 @@ public class CloudSave : MonoBehaviour
         }
     }
 
-
+    public void DisplayError(string errorMessage)
+    {
+        if (errorText != null)
+        {
+            errorText.text = errorMessage;
+        }
+        else
+        {
+            Debug.LogError("Error: Error Text not assigned in the inspector.");
+        }
+    }
     // Update the method in CloudSave.cs
     // public async void AddAttendeeToMeeting(string attendeePlayerId, Meeting meetingToAdd)
     // {

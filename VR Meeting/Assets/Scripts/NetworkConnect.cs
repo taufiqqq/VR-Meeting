@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
@@ -8,10 +9,11 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
-using Unity.Services.Lobbies; //rectangular notation external actor (server side)
+using Unity.Services.Lobbies;  // rectangular notation external actor (server side)
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using TMPro;
 
 public class NetworkConnect : MonoBehaviour
 {
@@ -32,6 +34,7 @@ public class NetworkConnect : MonoBehaviour
 
     public markerSpawn marker;
 
+
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -41,87 +44,115 @@ public class NetworkConnect : MonoBehaviour
     private void OnSignInComplete()
     {
         AuthManager.Instance.Create();
-
     }
 
     // Start is called before the first frame update
 
-    public async void Create()
+    public async Task Create()
     {
-        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
-        string newJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-        Debug.Log(newJoinCode);
-        Debug.LogError(newJoinCode);
-
-        transport.SetHostRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData);
-
-        CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
-
-        lobbyOptions.IsPrivate = false;
-
-        lobbyOptions.Data = new Dictionary<string, DataObject>();
-        DataObject dataObject = new DataObject(DataObject.VisibilityOptions.Public, newJoinCode);
-
-        string hostName = "admin"; // Replace with the actual host name
-        DataObject hostNameDataObject = new DataObject(DataObject.VisibilityOptions.Public, hostName);
-
-        DataObject lobbyBGDataObject = new DataObject(DataObject.VisibilityOptions.Public, lobbyBackground.ToString());
-
-        lobbyOptions.Data.Add("JOIN_CODE", dataObject);
-        lobbyOptions.Data.Add("HOST_NAME", hostNameDataObject);
-        lobbyOptions.Data.Add("LOBBY_BG", lobbyBGDataObject);
-
-        currentLobby = await Lobbies.Instance.CreateLobbyAsync("Meeting Name", maxConnection, lobbyOptions);
-
-        Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
-
-        playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
-        Debug.Log("Player ID: " + playerId);
-
-        joinCode = currentLobby.LobbyCode;
-
-        StartCoroutine(LoadSceneAsync(lobbyBackground, 0));
-    }
-
-
-    public async void Join()
-    {
-        QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
-
-        if (joinCode != "")
+        try
         {
-            try
+            if (maxConnection > 0 && maxConnection <= 20)
             {
-                currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
-                Debug.LogWarning("dapat we");
+                CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
 
+                lobbyOptions.IsPrivate = false;
+
+                lobbyOptions.Data = new Dictionary<string, DataObject>();
+
+                string hostName = "admin";  // Replace with the actual host name
+                DataObject hostNameDataObject =
+                    new DataObject(DataObject.VisibilityOptions.Public, hostName);
+
+                DataObject lobbyBGDataObject = new DataObject(
+                    DataObject.VisibilityOptions.Public, lobbyBackground.ToString());
+
+                lobbyOptions.Data.Add("HOST_NAME", hostNameDataObject);
+                lobbyOptions.Data.Add("LOBBY_BG", lobbyBGDataObject);
+
+                currentLobby = await Lobbies.Instance.CreateLobbyAsync(
+                    "Meeting Name", maxConnection, lobbyOptions);
+
+                Allocation allocation =
+                    await RelayService.Instance.CreateAllocationAsync(maxConnection);
+
+                transport.SetHostRelayData(allocation.RelayServer.IpV4,
+                                           (ushort)allocation.RelayServer.Port,
+                                           allocation.AllocationIdBytes, allocation.Key,
+                                           allocation.ConnectionData);
+
+                Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
+
+                playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
+                Debug.Log("Player ID: " + playerId);
+
+                joinCode = currentLobby.LobbyCode;
+
+                StartCoroutine(LoadSceneAsync(lobbyBackground, 0));
             }
-            catch (LobbyServiceException e)
+            else
             {
-                Debug.LogError(e);
+                throw new Exception("Max participant must be 1-20 only");
             }
-
-            string relayJoinCode = currentLobby.Data["JOIN_CODE"].Value;
-            Debug.LogError(relayJoinCode);
-            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
-
-            transport.SetClientRelayData(allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port, allocation.AllocationIdBytes, allocation.Key, allocation.ConnectionData, allocation.HostConnectionData);
-
-            Debug.LogError("Lobby ID : " + currentLobby.Id);
-            Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-
-            playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
-            Debug.Log("Player ID: " + playerId);
-
-            joinCode = currentLobby.LobbyCode;
-            Debug.LogError(currentLobby.Data["LOBBY_BG"].Value);
-
-            lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
-
-            StartCoroutine(LoadSceneAsync(lobbyBackground, 1));
-
+        }
+        catch (Exception e)
+        {
+            // Optionally log or handle the exception here before rethrowing
+            throw; // Rethrow the exception to the caller
         }
     }
+
+
+    public async Task Join()
+    {
+        try
+        {
+            QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
+
+            if (joinCode != "")
+            {
+                currentLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(joinCode);
+
+                string relayJoinCode = currentLobby.Data["JOIN_CODE"].Value;
+                Debug.LogError(relayJoinCode);
+                JoinAllocation allocation =
+                    await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
+
+                transport.SetClientRelayData(
+                    allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port,
+                    allocation.AllocationIdBytes, allocation.Key,
+                    allocation.ConnectionData, allocation.HostConnectionData);
+
+                Debug.LogError("Lobby ID : " + currentLobby.Id);
+                Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+
+                playerId = await AuthenticationService.Instance.GetPlayerNameAsync();
+                Debug.Log("Player ID: " + playerId);
+
+                joinCode = currentLobby.LobbyCode;
+                Debug.LogError(currentLobby.Data["LOBBY_BG"].Value);
+
+                lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
+
+                StartCoroutine(LoadSceneAsync(lobbyBackground, 1));
+            }
+            else
+            {
+                throw new Exception("Join code is empty.");
+            }
+        }
+        catch (LobbyServiceException e)
+        {
+            // Optionally log or handle the LobbyServiceException here before rethrowing
+            throw;
+        }
+        catch (Exception e)
+        {
+            // Optionally log or handle the exception here before rethrowing
+            throw;
+        }
+    }
+
 
     private void Update()
     {
@@ -153,7 +184,6 @@ public class NetworkConnect : MonoBehaviour
             Debug.LogError($"An error occurred: {e}");
         }
     }
-
 
     public void setJoinCode(string data)
     {
@@ -188,10 +218,7 @@ public class NetworkConnect : MonoBehaviour
             Debug.LogError("Error: DisplayJoinCode not found in the scene.");
             return;
         }
-
-
     }
-
 
     public async void ListLobbies()
     {
@@ -267,7 +294,8 @@ public class NetworkConnect : MonoBehaviour
         {
             if (currentLobby != null)
             {
-                LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, playerId);
+                LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode,
+                                                        playerId);
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(0);
                 authManager.SignOut();
                 Debug.Log("dah keluar");
@@ -283,7 +311,6 @@ public class NetworkConnect : MonoBehaviour
             Debug.Log("takleh keluar");
         }
     }
-
 
     public string getPlayerId()
     {
@@ -332,12 +359,11 @@ public class NetworkConnect : MonoBehaviour
         // The scene is now loaded
         Debug.Log("Scene loaded: " + sceneNumber);
 
-        HandlePlayer();             //TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
+        HandlePlayer();  // TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
         UpdateLobbyCode(joinCode);
 
         if (condition == 0)
         {
-
             NetworkManager.Singleton.StartHost();
             markerSpawn();
         }
@@ -352,5 +378,4 @@ public class NetworkConnect : MonoBehaviour
     {
         marker.OnNetworkSpawn();
     }
-
 }
