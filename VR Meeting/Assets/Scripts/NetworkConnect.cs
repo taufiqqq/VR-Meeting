@@ -9,7 +9,7 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Unity.Netcode.Transports.UTP;
-using Unity.Services.Lobbies;  // rectangular notation external actor (server side)
+using Unity.Services.Lobbies; // rectangular notation external actor (server side)
 using Unity.Services.Lobbies.Models;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
@@ -33,7 +33,6 @@ public class NetworkConnect : MonoBehaviour
     public CloudSave cloudSave;
 
     public markerSpawn marker;
-
 
     private async void Awake()
     {
@@ -61,26 +60,26 @@ public class NetworkConnect : MonoBehaviour
 
                 lobbyOptions.Data = new Dictionary<string, DataObject>();
 
-                string hostName = "admin";  // Replace with the actual host name
+                string hostName = "admin"; // Replace with the actual host name
                 DataObject hostNameDataObject =
-                    new DataObject(DataObject.VisibilityOptions.Public, hostName);
+                  new DataObject(DataObject.VisibilityOptions.Public, hostName);
 
                 DataObject lobbyBGDataObject = new DataObject(
-                    DataObject.VisibilityOptions.Public, lobbyBackground.ToString());
+                  DataObject.VisibilityOptions.Public, lobbyBackground.ToString());
 
                 lobbyOptions.Data.Add("HOST_NAME", hostNameDataObject);
                 lobbyOptions.Data.Add("LOBBY_BG", lobbyBGDataObject);
 
                 currentLobby = await Lobbies.Instance.CreateLobbyAsync(
-                    "Meeting Name", maxConnection, lobbyOptions);
+                  "Meeting Name", maxConnection, lobbyOptions);
 
                 Allocation allocation =
-                    await RelayService.Instance.CreateAllocationAsync(maxConnection);
+                  await RelayService.Instance.CreateAllocationAsync(maxConnection);
 
                 transport.SetHostRelayData(allocation.RelayServer.IpV4,
-                                           (ushort)allocation.RelayServer.Port,
-                                           allocation.AllocationIdBytes, allocation.Key,
-                                           allocation.ConnectionData);
+                  (ushort)allocation.RelayServer.Port,
+                  allocation.AllocationIdBytes, allocation.Key,
+                  allocation.ConnectionData);
 
                 Debug.LogError("Lobby Code : " + currentLobby.LobbyCode);
 
@@ -103,7 +102,6 @@ public class NetworkConnect : MonoBehaviour
         }
     }
 
-
     public async Task Join()
     {
         try
@@ -117,12 +115,12 @@ public class NetworkConnect : MonoBehaviour
                 string relayJoinCode = currentLobby.Data["JOIN_CODE"].Value;
                 Debug.LogError(relayJoinCode);
                 JoinAllocation allocation =
-                    await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
+                  await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
 
                 transport.SetClientRelayData(
-                    allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port,
-                    allocation.AllocationIdBytes, allocation.Key,
-                    allocation.ConnectionData, allocation.HostConnectionData);
+                  allocation.RelayServer.IpV4, (ushort)allocation.RelayServer.Port,
+                  allocation.AllocationIdBytes, allocation.Key,
+                  allocation.ConnectionData, allocation.HostConnectionData);
 
                 Debug.LogError("Lobby ID : " + currentLobby.Id);
                 Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
@@ -154,28 +152,46 @@ public class NetworkConnect : MonoBehaviour
         }
     }
 
-
-    private void Update()
+    private async void Update()
     {
         try
         {
             if (heartBeatTimer > 15)
             {
                 heartBeatTimer -= 15;
+                Debug.Log("HB timer 15");
 
                 if (currentLobby != null)
                 {
+                    Lobby lobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
+                    currentLobby = lobby;
+                    Debug.Log("Lobby Debug Log");
+                    try
+                    {
+                        Debug.Log(currentLobby.Players[0].Id);
+                        if (currentLobby.Players[0].Id == null || currentLobby.Players[0].Id == "")
+                        {
+                            Debug.Log("Mane Load Scene. Ini sebelum");
+                            StartCoroutine(LoadSceneAsync(0, 2));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log(e);
+                    }
                     if (currentLobby.HostId == AuthenticationService.Instance.PlayerId)
                     {
                         LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
                         Debug.LogError(currentLobby.Id);
                         Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+                        Debug.Log("HeartBeat Ping shit");
                     }
                 }
                 else
                 {
                     // Handle the case when currentLobby is null (e.g., the main lobby)
                     Debug.LogWarning("Current lobby is null (Main Lobby)");
+                    Debug.Log("lobby is null");
                 }
             }
             heartBeatTimer += Time.deltaTime;
@@ -286,6 +302,15 @@ public class NetworkConnect : MonoBehaviour
 
     public List<string> getPlayerList()
     {
+        joinedPlayers = new List<string>();
+
+        foreach (var player in currentLobby.Players)
+        {
+            joinedPlayers.Add(player.Id);
+            //problemdia sebab dia guna player id, bukan name. nanti kau try guna name
+
+        }
+
         return joinedPlayers;
     }
 
@@ -296,7 +321,7 @@ public class NetworkConnect : MonoBehaviour
             if (currentLobby != null)
             {
                 LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode,
-                                                        playerId);
+                  playerId);
                 AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(0);
                 authManager.SignOut();
                 NetworkManager.Singleton.Shutdown();
@@ -311,6 +336,19 @@ public class NetworkConnect : MonoBehaviour
         {
             Debug.Log(e);
             Debug.Log("takleh keluar");
+        }
+    }
+
+    public void KickPlayer(int id)
+    {
+        try
+        {
+            LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, currentLobby.Players[id].Id);
+            Debug.Log("Mane Lobby anjing");
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
         }
     }
 
@@ -355,13 +393,14 @@ public class NetworkConnect : MonoBehaviour
 
         while (!asyncLoad.isDone)
         {
-            yield return null;
+            yield
+            return null;
         }
 
         // The scene is now loaded
         Debug.Log("Scene loaded: " + sceneNumber);
 
-        HandlePlayer();  // TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
+        HandlePlayer(); // TAK CHECK UNTUK SEMUA JUST UNTUK DIRI SENDIRI
         UpdateLobbyCode(joinCode);
 
         if (condition == 0)
@@ -369,10 +408,14 @@ public class NetworkConnect : MonoBehaviour
             NetworkManager.Singleton.StartHost();
             markerSpawn();
         }
-        else
+        else if (condition == 1)
         {
             NetworkManager.Singleton.StartClient();
             markerSpawn();
+        }
+        else
+        {
+            NetworkManager.Singleton.Shutdown();
         }
     }
 
