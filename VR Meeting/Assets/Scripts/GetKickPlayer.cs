@@ -30,12 +30,12 @@ public class GetKickPlayer : MonoBehaviour
         return playerVal;
     }
 
-    public void TransferDataToNetworkManager()
+    public async void TransferDataToNetworkManager()
     {
         try
         {
-            networkConnect.KickPlayer(playerVal);
-            Debug.Log("Dah KICK lah anjing");
+            await networkConnect.KickPlayer(playerVal);
+            Debug.Log("after networkConnect.KickPlayer");
         }
         catch (Exception e)
         {

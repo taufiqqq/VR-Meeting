@@ -23,6 +23,7 @@ public class NetworkConnect : MonoBehaviour
     private string playerId;
     private string playerName;
     private int lobbyBackground = 1;
+    private string joinID;
 
     private List<string> joinedPlayers = new List<string>();
 
@@ -87,6 +88,7 @@ public class NetworkConnect : MonoBehaviour
                 Debug.Log("Player ID: " + playerId);
 
                 joinCode = currentLobby.LobbyCode;
+                joinID = currentLobby.Id;
 
                 StartCoroutine(LoadSceneAsync(lobbyBackground, 0));
             }
@@ -129,6 +131,8 @@ public class NetworkConnect : MonoBehaviour
                 Debug.Log("Player ID: " + playerId);
 
                 joinCode = currentLobby.LobbyCode;
+                joinID = currentLobby.Id;
+
                 Debug.LogError(currentLobby.Data["LOBBY_BG"].Value);
 
                 lobbyBackground = int.Parse(currentLobby.Data["LOBBY_BG"].Value);
@@ -161,37 +165,17 @@ public class NetworkConnect : MonoBehaviour
                 heartBeatTimer -= 15;
                 Debug.Log("HB timer 15");
 
-                if (currentLobby != null)
+                Lobby lobby = await Lobbies.Instance.GetLobbyAsync(joinID);
+                currentLobby = lobby;
+                Debug.Log("joinID");
+                Debug.Log(joinID);
+                
+                if (currentLobby.HostId == AuthenticationService.Instance.PlayerId)
                 {
-                    Lobby lobby = await Lobbies.Instance.GetLobbyAsync(currentLobby.Id);
-                    currentLobby = lobby;
-                    Debug.Log("Lobby Debug Log");
-                    try
-                    {
-                        Debug.Log(currentLobby.Players[0].Id);
-                        if (currentLobby.Players[0].Id == null || currentLobby.Players[0].Id == "")
-                        {
-                            Debug.Log("Mane Load Scene. Ini sebelum");
-                            StartCoroutine(LoadSceneAsync(0, 2));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.Log(e);
-                    }
-                    if (currentLobby.HostId == AuthenticationService.Instance.PlayerId)
-                    {
-                        LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
-                        Debug.LogError(currentLobby.Id);
-                        Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
-                        Debug.Log("HeartBeat Ping shit");
-                    }
-                }
-                else
-                {
-                    // Handle the case when currentLobby is null (e.g., the main lobby)
-                    Debug.LogWarning("Current lobby is null (Main Lobby)");
-                    Debug.Log("lobby is null");
+                    LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
+                    Debug.LogError(currentLobby.Id);
+                    Debug.LogError(currentLobby.Data["JOIN_CODE"].Value);
+                    Debug.Log("HeartBeat Ping shit");
                 }
             }
             heartBeatTimer += Time.deltaTime;
@@ -200,6 +184,13 @@ public class NetworkConnect : MonoBehaviour
         {
             Debug.LogError($"An error occurred: {e}");
         }
+
+        if ((currentLobby == null || string.IsNullOrEmpty(currentLobby.Players[0].Id)) && SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            Debug.Log("Main Scene Loading...");
+            StartCoroutine(LoadSceneAsync(0, 2));
+        }
+
     }
 
     public void setJoinCode(string data)
@@ -339,12 +330,12 @@ public class NetworkConnect : MonoBehaviour
         }
     }
 
-    public void KickPlayer(int id)
+    public async Task KickPlayer(int id)
     {
         try
         {
-            LobbyService.Instance.RemovePlayerAsync(currentLobby.LobbyCode, currentLobby.Players[id].Id);
-            Debug.Log("Mane Lobby anjing");
+            await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, currentLobby.Players[id].Id);
+            Debug.Log(" after LobbyService.Instance.RemovePlayerAsync");
         }
         catch (LobbyServiceException e)
         {
